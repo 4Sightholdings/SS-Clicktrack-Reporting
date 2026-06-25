@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>4Sight Click Dashboard</title>
+
+<style>
+
+/* ===== GLOBAL ===== */
+body {
+    font-family: Segoe UI, Arial;
+    background: #f4f6f9;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+/* ===== TABS ===== */
+.tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    background: #ddd;
+    margin: 2px;
+    border-radius: 4px;
+}
+
+.tab.active {
+    background: #0078d4;
+    color: white;
+}
+
+/* ===== DASHBOARD ===== */
+.dashboard {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.card {
+    background: white;
+    padding: 15px;
+    border-radius: 6px;
+    text-align: center;
+    width: 180px;
+}
+
+.value {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+/* ===== CLUSTER CONTENT ===== */
+.cluster {
+    display: none;
+}
+
+.cluster.active {
+    display: block;
+}
+
+/* ===== TABLE ===== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    font-size: 12px;
+}
+
+th {
+    background: #002f6c; /* 4Sight navy feel */
+    color: white;
+}
+
+/* ===== CLUSTER COLORS ===== */
+.cp-header { background:#CC0000; color:white; padding:10px; }
+.be-header { background:#0055CC; color:white; padding:10px; }
+.it-header { background:#CC9900; color:white; padding:10px; }
+.ot-header { background:#228B22; color:white; padding:10px; }
+
+</style>
+</head>
+
+<body>
+
+<h1>4Sight Click Track Dashboard</h1>
+
+<!-- DASHBOARD -->
+<div class="dashboard">
+    <div class="card"><div class="value" id="total">--</div>Total Clicks</div>
+    <div class="card"><div class="value" id="external">--</div>Banner Clicks</div>
+    <div class="card"><div class="value" id="recipients">--</div>Recipients</div>
+    <div class="card"><div class="value" id="senders">--</div>Senders</div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+    <div class="tab active" onclick="showCluster('CP')" id="tab-CP">CP</div>
+    <div class="tab" onclick="showCluster('BE')" id="tab-BE">BE</div>
+    <div class="tab" onclick="showCluster('IT')" id="tab-IT">IT</div>
+    <div class="tab" onclick="showCluster('OT')" id="tab-OT">OT</div>
+</div>
+
+<!-- CLUSTER CONTENT -->
+<div id="CP" class="cluster active">
+    <div class="cp-header">Channel Partner</div>
+    <table>
+        <tr><th>Banner</th><th>Email</th><th>Sender</th><th>Clicked</th><th>Link</th></tr>
+    </table>
+</div>
+
+<div id="BE" class="cluster">
+    <div class="be-header">Business Environment</div>
+    <table>
+        <tr><th>Banner</th><th>Email</th><th>Sender</th><th>Clicked</th><th>Link</th></tr>
+    </table>
+</div>
+
+<div id="IT" class="cluster">
+    <div class="it-header">Information Technology</div>
+    <table>
+        <tr><th>Banner</th><th>Email</th><th>Sender</th><th>Clicked</th><th>Link</th></tr>
+    </table>
+</div>
+
+<div id="OT" class="cluster">
+    <div class="ot-header">Operational Technology</div>
+    <table>
+        <tr><th>Banner</th><th>Email</th><th>Sender</th><th>Clicked</th><th>Link</th></tr>
+    </table>
+</div>
+
+<script>
+
+/* ===== TAB SWITCH ===== */
+function showCluster(cluster) {
+
+    document.querySelectorAll(".cluster").forEach(c => c.classList.remove("active"));
+    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+
+    document.getElementById(cluster).classList.add("active");
+    document.getElementById("tab-" + cluster).classList.add("active");
+}
+
+</script>
+
+</body>
+</html>
