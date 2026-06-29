@@ -43,13 +43,37 @@
   }
   .home-btn:hover{background:rgba(255,255,255,.08);transform:translateY(-1px);}
   .home-btn:active{transform:translateY(0);}
-  .home-btn .brand-logo{
+  .brand-logo{
     height:56px;width:auto;display:block;
     filter:drop-shadow(0 2px 4px rgba(0,0,0,.25));
   }
 
+  /* ===== DATE RANGE FILTER ===== */
+  .date-filter{
+    margin-top:18px;background:#fff;border:1px solid var(--border);border-radius:10px;
+    padding:14px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+    box-shadow:0 1px 3px rgba(0,0,0,.04);
+  }
+  .date-filter .lbl{font-size:12px;color:#6b7280;text-transform:uppercase;letter-spacing:.5px;font-weight:700;}
+  .date-filter input[type="date"]{
+    padding:8px 10px;border:1px solid var(--border);border-radius:8px;
+    font-family:inherit;font-size:13px;color:var(--navy);
+  }
+  .date-filter .sep{color:#6b7280;font-weight:600;}
+  .date-filter .quick{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto;}
+  .date-filter .quick button{
+    background:#f3f4f6;border:1px solid var(--border);color:var(--navy);
+    padding:6px 12px;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;
+    transition:all .15s;
+  }
+  .date-filter .quick button:hover{background:#e5e7eb;}
+  .date-filter .friendly{
+    font-size:13px;color:var(--blue);font-weight:600;
+    background:#eaf3ff;padding:6px 12px;border-radius:8px;
+  }
+
   /* ===== CLUSTER PILLS ===== */
-  .cluster-bar{margin-top:20px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+  .cluster-bar{margin-top:16px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
   .cluster-bar .label{font-size:12px;color:#6b7280;text-transform:uppercase;letter-spacing:.5px;font-weight:600;margin-right:4px;}
   .pill{padding:8px 16px;border-radius:999px;font-size:13px;font-weight:700;cursor:pointer;
     background:#fff;border:2px solid var(--border);color:var(--navy);transition:all .15s;
@@ -69,7 +93,7 @@
   .pill.active .count{background:rgba(255,255,255,.25);}
 
   /* ===== KPI CARDS ===== */
-  .kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-top:18px;}
+  .kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-top:16px;}
   .card{background:#fff;border-radius:10px;padding:18px;box-shadow:0 1px 3px rgba(0,0,0,.06);
     border-top:4px solid var(--blue);transition:border-color .3s;}
   .card h4{margin:0 0 8px;font-size:12px;letter-spacing:.5px;text-transform:uppercase;color:#6b7280;}
@@ -146,7 +170,6 @@
   .drawer .row{display:flex;gap:8px;margin-top:10px;align-items:center;flex-wrap:wrap;}
   .help-box{background:#fef3c7;border:1px solid #fcd34d;color:#78350f;padding:10px 12px;
     border-radius:6px;font-size:12px;margin-top:10px;line-height:1.5;}
-  .help-box a{color:#7c2d12;font-weight:600;}
   #pastList{margin-top:16px;}
   #pastList .item{padding:12px;border:1px solid var(--border);border-radius:8px;margin-bottom:8px;
     display:flex;justify-content:space-between;align-items:center;gap:10px;}
@@ -165,7 +188,7 @@
   @media (max-width:760px){
     .header{flex-wrap:wrap;}
     .header .meta{margin-left:0;width:100%;justify-content:space-between;}
-    .home-btn .brand-logo{height:44px;}
+    .brand-logo{height:44px;}
   }
   @media (max-width:640px){.kpis{grid-template-columns:repeat(2,1fr);}}
 </style>
@@ -175,7 +198,7 @@
 <!-- ===== HEADER ===== -->
 <div class="header" id="header">
   <button class="home-btn" id="homeBtn" title="Home — reset dashboard" aria-label="Home">
-    <img src="4Sight-4AI-White.png" alt="4Sight | 4AI" class="brand-logo">
+    <span id="brandLogo"></span>
   </button>
 
   <div>
@@ -190,6 +213,21 @@
       <button class="btn btn-blue" id="uploadBtn">⬆️ Upload</button>
       <input type="file" id="fileInput" accept=".xlsx,.xls,.csv">
     </div>
+  </div>
+</div>
+
+<!-- ===== DATE RANGE FILTER ===== -->
+<div class="date-filter">
+  <span class="lbl">📅 Filter</span>
+  <input type="date" id="dateFrom"> <span class="sep">→</span>
+  <input type="date" id="dateTo">
+  <span class="friendly" id="friendlyRange">—</span>
+  <div class="quick">
+    <button data-q="full">Full range</button>
+    <button data-q="thisWeek">This week</button>
+    <button data-q="lastWeek">Last week</button>
+    <button data-q="thisMonth">This month</button>
+    <button data-q="lastMonth">Last month</button>
   </div>
 </div>
 
@@ -289,6 +327,18 @@ function setStatus(msg, isError){
   if(el){ el.textContent=msg; el.classList.toggle('error', !!isError); }
 }
 
+/* ===== Inject brand logo (resilient to copy-paste stripping) ===== */
+(function injectLogo(){
+  const slot = $('brandLogo');
+  if(!slot) return;
+  const img = document.createElement('img');
+  img.src = '4Sight-4AI-White.png';
+  img.alt = '4Sight | 4AI';
+  img.className = 'brand-logo';
+  img.onerror = () => { slot.textContent = '4Sight | 4AI'; slot.style.color='#fff'; slot.style.fontWeight='800'; };
+  slot.replaceWith(img);
+})();
+
 /* ===== Cluster mapping ===== */
 const CLUSTER_MAP = {
   SS:['4citizen 360','African Mining Indaba_Download Brochure_9-12Feb2026',
@@ -341,6 +391,8 @@ const CLUSTER_NAMES = {ALL:'All Clusters',BE:'Business Environment',CP:'Channel 
 
 let currentReport = null;
 let activeCluster = 'ALL';
+let filterFrom = null;     // Date object (start of day, inclusive)
+let filterTo   = null;     // Date object (end of day, inclusive)
 
 /* ===== Upload ===== */
 const fileInput = $('fileInput');
@@ -401,6 +453,31 @@ function formatDate(d){if(!d) return '—';
   return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});}
 function formatTime(d){if(!d) return '—';
   return d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});}
+function isoDay(d){
+  // YYYY-MM-DD in local time
+  const y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,'0'), day=String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${day}`;
+}
+function startOfDay(d){ const x=new Date(d); x.setHours(0,0,0,0); return x; }
+function endOfDay(d){ const x=new Date(d); x.setHours(23,59,59,999); return x; }
+
+/* ===== Friendly week-of-month labels ===== */
+function ordinal(n){const s=['th','st','nd','rd'], v=n%100; return n+(s[(v-20)%10]||s[v]||s[0]);}
+function weekOfMonth(d){ return Math.min(5, Math.ceil(d.getDate()/7)); }
+function monthName(d){ return d.toLocaleString('en-GB',{month:'long'}); }
+function friendlyRangeLabel(a, b){
+  if(!a||!b) return '';
+  const wA=weekOfMonth(a), wB=weekOfMonth(b);
+  const sameMonth = a.getMonth()===b.getMonth() && a.getFullYear()===b.getFullYear();
+  const yA=a.getFullYear(), yB=b.getFullYear();
+  if(sameMonth){
+    if(wA===wB) return `${ordinal(wA)} week of ${monthName(a)} ${yA}`;
+    if(wB-wA===1) return `${ordinal(wA)} & ${ordinal(wB)} week of ${monthName(a)} ${yA}`;
+    return `${ordinal(wA)} – ${ordinal(wB)} week of ${monthName(a)} ${yA}`;
+  }
+  const yearTail = yA===yB ? ` ${yA}` : ` ${yA} – ${yB}`;
+  return `${ordinal(wA)} week of ${monthName(a)} – ${ordinal(wB)} week of ${monthName(b)}${yearTail}`;
+}
 
 function processRows(rows, filename){
   const clicks = [];
@@ -424,17 +501,94 @@ function processRows(rows, filename){
     setStatus('⚠️ Could not find the "Template" column in your file. Check the file format.', true);
   }
   currentReport = { filename: filename||'Manual entry', clicks, savedAt:new Date().toISOString() };
+
+  // Auto-populate date filter inputs to the full range
+  const dates = clicks.map(c => c.clickISO ? new Date(c.clickISO) : (c.sentISO ? new Date(c.sentISO) : null))
+                      .filter(Boolean);
+  if(dates.length){
+    const min = new Date(Math.min(...dates));
+    const max = new Date(Math.max(...dates));
+    $('dateFrom').value = isoDay(min);
+    $('dateTo').value   = isoDay(max);
+    filterFrom = startOfDay(min);
+    filterTo   = endOfDay(max);
+  } else {
+    $('dateFrom').value=''; $('dateTo').value='';
+    filterFrom=null; filterTo=null;
+  }
+  updateFriendlyRangeUI();
   recompute();
+}
+
+/* ===== Date filter UI ===== */
+function updateFriendlyRangeUI(){
+  if(filterFrom && filterTo){
+    setText('friendlyRange', friendlyRangeLabel(filterFrom, filterTo));
+  } else setText('friendlyRange','—');
+}
+
+$('dateFrom').addEventListener('change', () => {
+  const v = $('dateFrom').value;
+  filterFrom = v ? startOfDay(new Date(v)) : null;
+  updateFriendlyRangeUI(); recompute();
+});
+$('dateTo').addEventListener('change', () => {
+  const v = $('dateTo').value;
+  filterTo = v ? endOfDay(new Date(v)) : null;
+  updateFriendlyRangeUI(); recompute();
+});
+
+/* ===== Quick filter buttons ===== */
+document.querySelectorAll('.date-filter .quick button').forEach(b => {
+  b.addEventListener('click', () => {
+    const q = b.dataset.q;
+    const now = new Date();
+    let a, z;
+    if(q==='full'){
+      if(!currentReport){ return; }
+      const dates = currentReport.clicks.map(c => c.clickISO ? new Date(c.clickISO) : null).filter(Boolean);
+      if(!dates.length) return;
+      a = new Date(Math.min(...dates)); z = new Date(Math.max(...dates));
+    } else if(q==='thisWeek'){
+      const day=now.getDay()||7; a=new Date(now); a.setDate(now.getDate()-day+1); z=new Date(a); z.setDate(a.getDate()+6);
+    } else if(q==='lastWeek'){
+      const day=now.getDay()||7; z=new Date(now); z.setDate(now.getDate()-day); a=new Date(z); a.setDate(z.getDate()-6);
+    } else if(q==='thisMonth'){
+      a=new Date(now.getFullYear(), now.getMonth(), 1); z=new Date(now.getFullYear(), now.getMonth()+1, 0);
+    } else if(q==='lastMonth'){
+      a=new Date(now.getFullYear(), now.getMonth()-1, 1); z=new Date(now.getFullYear(), now.getMonth(), 0);
+    }
+    if(a && z){
+      $('dateFrom').value = isoDay(a);
+      $('dateTo').value   = isoDay(z);
+      filterFrom = startOfDay(a); filterTo = endOfDay(z);
+      updateFriendlyRangeUI(); recompute();
+    }
+  });
+});
+
+function withinFilter(c){
+  const d = c.clickISO ? new Date(c.clickISO) : (c.sentISO ? new Date(c.sentISO) : null);
+  if(!d) return false;
+  if(filterFrom && d < filterFrom) return false;
+  if(filterTo   && d > filterTo)   return false;
+  return true;
 }
 
 function recompute(){
   if(!currentReport) return;
-  const all = currentReport.clicks;
-  const clusterCounts = {ALL:all.length,BE:0,CP:0,IT:0,OT:0,SS:0,UN:0};
-  all.forEach(c => clusterCounts[c.cluster] = (clusterCounts[c.cluster]||0)+1);
+
+  // 1. Apply date filter FIRST (everything else uses this filtered set)
+  const dateScoped = currentReport.clicks.filter(withinFilter);
+
+  // 2. Cluster pill counts (within date range)
+  const clusterCounts = {ALL:dateScoped.length,BE:0,CP:0,IT:0,OT:0,SS:0,UN:0};
+  dateScoped.forEach(c => clusterCounts[c.cluster] = (clusterCounts[c.cluster]||0)+1);
   ['ALL','BE','CP','IT','OT','SS','UN'].forEach(k => setText('cnt-'+k, clusterCounts[k].toLocaleString()));
 
-  const rows = activeCluster==='ALL' ? all : all.filter(c => c.cluster===activeCluster);
+  // 3. Apply cluster filter
+  const rows = activeCluster==='ALL' ? dateScoped : dateScoped.filter(c => c.cluster===activeCluster);
+
   let internal=0, external=0;
   const extRecipients=new Set(), senders=new Set(), responseMins=[];
   let minDate=null, maxDate=null;
@@ -555,10 +709,13 @@ document.querySelectorAll('#clusterBar .pill').forEach(p => {
   });
 });
 
-/* ===== Home button — full reset only (no auto-upload) ===== */
+/* ===== Home button — full reset only ===== */
 $('homeBtn').addEventListener('click', () => {
   currentReport = null;
   activeCluster = 'ALL';
+  filterFrom = null; filterTo = null;
+  $('dateFrom').value=''; $('dateTo').value='';
+  updateFriendlyRangeUI();
   document.querySelectorAll('#clusterBar .pill').forEach(x =>
     x.classList.toggle('active', x.dataset.cluster === 'ALL'));
   ['ALL','BE','CP','IT','OT','SS','UN'].forEach(k => setText('cnt-'+k, '0'));
@@ -677,6 +834,12 @@ async function openReport(id){
     data.clicks.forEach(c => c.cluster = classifyBanner(c.banner));
     currentReport = data;
     activeCluster='ALL';
+    // restore date filter from saved data
+    if(data.filterFromISO){ filterFrom = new Date(data.filterFromISO); $('dateFrom').value = isoDay(filterFrom); }
+    else { filterFrom = null; $('dateFrom').value=''; }
+    if(data.filterToISO){ filterTo = new Date(data.filterToISO); $('dateTo').value = isoDay(filterTo); }
+    else { filterTo = null; $('dateTo').value=''; }
+    updateFriendlyRangeUI();
     document.querySelectorAll('#clusterBar .pill').forEach(x => x.classList.toggle('active', x.dataset.cluster==='ALL'));
     recompute();
     setStatus('✅ Loaded report: '+(data.filename||'(saved report)'));
@@ -693,18 +856,34 @@ async function deleteReport(id){
 async function saveCurrentReport(){
   if(!currentReport){ alert('Upload a report first.'); return; }
   if(!getToken()){ alert('Save your GitHub token first.'); return; }
-  const label = prompt('Name this report:',
-    currentReport.filename || ('Rocketseed Report '+new Date().toLocaleDateString()));
+
+  // Only save clicks within the active date range
+  const filtered = currentReport.clicks.filter(withinFilter);
+  if(!filtered.length){ alert('No clicks within the selected date range — nothing to save.'); return; }
+
+  // Suggest a friendly week-of-month label
+  const suggested = (filterFrom && filterTo) ? friendlyRangeLabel(filterFrom, filterTo) : '';
+  const fallback = currentReport.filename || ('Rocketseed Report '+new Date().toLocaleDateString());
+  const label = prompt('Name this report:', suggested || fallback);
   if(label===null) return;
+
+  const reportToSave = {
+    filename: label,
+    clicks: filtered,
+    filterFromISO: filterFrom ? filterFrom.toISOString() : null,
+    filterToISO:   filterTo   ? filterTo.toISOString()   : null,
+    savedAt: new Date().toISOString()
+  };
+
   setStatus('⏳ Saving report to Gist…');
   try{
     const body = {
       description: GIST_DESCRIPTION_TAG+' — '+label,
       public:false,
-      files:{ ['rocketseed-'+Date.now()+'.json']:{ content: JSON.stringify(currentReport,null,2) } }
+      files:{ ['rocketseed-'+Date.now()+'.json']:{ content: JSON.stringify(reportToSave,null,2) } }
     };
     await ghFetch('https://api.github.com/gists',{method:'POST',body:JSON.stringify(body)});
-    setStatus('✅ Saved to Gist: '+label);
+    setStatus(`✅ Saved to Gist: ${label} (${filtered.length.toLocaleString()} clicks)`);
     setTimeout(loadPastReports, 1500);
   } catch(err){ setStatus('❌ Could not save: '+err.message, true); }
 }
