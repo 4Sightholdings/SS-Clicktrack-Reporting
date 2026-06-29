@@ -5,14 +5,10 @@
 <title>Rocketseed Banner Click Report — 4Sight Holdings</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-  :root{
-    --navy:#0b1e3f; --blue:#0078d4; --red:#c8102e;
-    --grey:#f4f6f9; --border:#e3e6ea; --text:#1f2937;
-  }
+  :root{--navy:#0b1e3f;--blue:#0078d4;--red:#c8102e;--grey:#f4f6f9;--border:#e3e6ea;--text:#1f2937;}
   *{box-sizing:border-box;}
   body{font-family:"Segoe UI",Arial,sans-serif;background:var(--grey);margin:0;padding:24px;color:var(--text);}
 
-  /* ===== HEADER ===== */
   .header{background:var(--navy);color:#fff;border-radius:10px;padding:18px 24px;
     display:flex;align-items:center;gap:20px;box-shadow:0 2px 6px rgba(0,0,0,.08);}
   .header h1{font-size:22px;margin:0;font-weight:700;}
@@ -21,12 +17,9 @@
   .header .actions{display:flex;gap:10px;margin-left:16px;}
   .btn{padding:10px 16px;border:none;border-radius:8px;font-family:inherit;font-size:14px;
     font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px;}
-  .btn-red{background:var(--red);color:#fff;}
-  .btn-blue{background:var(--blue);color:#fff;}
+  .btn-red{background:var(--red);color:#fff;} .btn-blue{background:var(--blue);color:#fff;}
   .btn-ghost{background:#fff;color:var(--navy);border:1px solid var(--border);}
-  .btn:disabled{opacity:.6;cursor:not-allowed;}
 
-  /* ===== KPI CARDS ===== */
   .kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-top:20px;}
   .card{background:#fff;border-radius:10px;padding:18px;box-shadow:0 1px 3px rgba(0,0,0,.06);
     border-top:4px solid var(--blue);}
@@ -37,15 +30,45 @@
   .card.red{border-top-color:var(--red);} .card.purple{border-top-color:#7c3aed;}
   .card.navy{border-top-color:var(--navy);}
 
-  /* ===== STATUS ===== */
   .status{margin-top:18px;padding:12px 16px;background:#eaf3ff;border-radius:8px;
     font-size:13px;color:#1f3a5f;}
 
-  /* ===== FOOTER ===== */
+  /* ===== BANNER BREAKDOWN ===== */
+  .breakdown{margin-top:24px;}
+  .breakdown h2{font-size:18px;color:var(--navy);margin:0 0 12px;display:flex;align-items:center;gap:8px;}
+  .breakdown .controls{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+  .breakdown input[type="text"]{flex:1;min-width:220px;padding:10px;border:1px solid var(--border);
+    border-radius:8px;font-family:inherit;font-size:14px;}
+  .banner-group{background:#fff;border:1px solid var(--border);border-radius:10px;
+    margin-bottom:10px;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.04);}
+  .banner-btn{width:100%;padding:14px 18px;display:flex;justify-content:space-between;
+    align-items:center;gap:12px;background:#fff;border:none;cursor:pointer;
+    font-family:inherit;font-size:15px;color:var(--navy);font-weight:600;text-align:left;
+    transition:background .15s;}
+  .banner-btn:hover{background:#f9fafb;}
+  .banner-btn .left{display:flex;align-items:center;gap:10px;flex:1;min-width:0;}
+  .banner-btn .left .title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .banner-btn .arrow{transition:transform .2s;color:#6b7280;}
+  .banner-group.open .banner-btn .arrow{transform:rotate(90deg);}
+  .banner-btn .count{background:var(--blue);color:#fff;padding:4px 10px;border-radius:999px;
+    font-size:12px;font-weight:700;flex-shrink:0;}
+  .banner-body{display:none;border-top:1px solid var(--border);background:#fafbfc;}
+  .banner-group.open .banner-body{display:block;}
+  table.people{width:100%;border-collapse:collapse;font-size:13px;}
+  table.people th{background:#eef2f7;text-align:left;padding:10px 14px;
+    font-weight:600;color:var(--navy);position:sticky;top:0;}
+  table.people td{padding:10px 14px;border-top:1px solid var(--border);vertical-align:top;}
+  table.people tr:hover td{background:#fff;}
+  table.people .num{text-align:right;font-variant-numeric:tabular-nums;}
+  table.people .badge{display:inline-block;background:var(--red);color:#fff;
+    padding:2px 8px;border-radius:999px;font-size:11px;font-weight:700;min-width:24px;text-align:center;}
+  .breakdown .empty{padding:24px;text-align:center;color:#6b7280;font-style:italic;
+    background:#fff;border:1px dashed var(--border);border-radius:10px;}
+
   .footer{text-align:center;margin-top:28px;font-size:12px;color:#6b7280;}
   .footer b{color:var(--blue);}
 
-  /* ===== RIGHT-SIDE DRAWER ===== */
+  /* ===== DRAWER ===== */
   .backdrop{position:fixed;inset:0;background:rgba(0,0,0,.4);opacity:0;visibility:hidden;
     transition:opacity .25s ease;z-index:998;}
   .backdrop.open{opacity:1;visibility:visible;}
@@ -56,7 +79,7 @@
   .drawer header{padding:18px 22px;background:var(--navy);color:#fff;
     display:flex;justify-content:space-between;align-items:center;}
   .drawer header h3{margin:0;font-size:18px;}
-  .drawer .close{background:transparent;border:none;color:#fff;font-size:22px;cursor:pointer;line-height:1;}
+  .drawer .close{background:transparent;border:none;color:#fff;font-size:22px;cursor:pointer;}
   .drawer .body{padding:18px 22px;overflow-y:auto;flex:1;}
   .drawer small{color:#6b7280;}
   .drawer input[type="password"]{width:100%;padding:10px;border:1px solid var(--border);
@@ -64,15 +87,14 @@
   .drawer .row{display:flex;gap:8px;margin-top:10px;align-items:center;flex-wrap:wrap;}
   #pastList{margin-top:16px;}
   #pastList .item{padding:12px;border:1px solid var(--border);border-radius:8px;margin-bottom:8px;
-    display:flex;justify-content:space-between;align-items:center;gap:10px;transition:background .15s;}
+    display:flex;justify-content:space-between;align-items:center;gap:10px;}
   #pastList .item:hover{background:#f9fafb;}
   #pastList .item .info{flex:1;min-width:0;}
   #pastList .item .info b{color:var(--navy);display:block;
     overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  #pastList .item .info small{color:#6b7280;}
-  #pastList .item .actions{display:flex;gap:6px;flex-shrink:0;}
+  #pastList .item .actions{display:flex;gap:6px;}
   .icon-btn{background:transparent;border:1px solid var(--border);border-radius:6px;
-    padding:6px 10px;cursor:pointer;font-size:14px;transition:all .15s;}
+    padding:6px 10px;cursor:pointer;font-size:14px;}
   .icon-btn:hover{background:#f3f4f6;}
   .icon-btn.danger:hover{background:#fee2e2;border-color:var(--red);color:var(--red);}
   .icon-btn.primary:hover{background:#dbeafe;border-color:var(--blue);color:var(--blue);}
@@ -120,13 +142,26 @@
 
 <div class="status" id="status">No matching results found</div>
 
+<!-- ===== BANNER BREAKDOWN ===== -->
+<div class="breakdown">
+  <h2>📣 Banner Click Breakdown</h2>
+  <div class="controls">
+    <input type="text" id="bannerSearch" placeholder="🔍 Search banners, recipients or senders…">
+    <button class="btn btn-ghost" id="expandAllBtn">⬇️ Expand all</button>
+    <button class="btn btn-ghost" id="collapseAllBtn">⬆️ Collapse all</button>
+  </div>
+  <div id="bannerList">
+    <div class="empty">Upload a Rocketseed export to see the banner breakdown.</div>
+  </div>
+</div>
+
 <!-- ===== FOOTER ===== -->
 <div class="footer">
   Generated by <b>4Sight Marketing</b> · Report Date: <span id="reportDate">[ DD MMM YYYY ]</span><br>
   Data source: Rocketseed Click Track Export
 </div>
 
-<!-- ===== RIGHT-SIDE DRAWER ===== -->
+<!-- ===== DRAWER ===== -->
 <div class="backdrop" id="backdrop"></div>
 <aside class="drawer" id="drawer">
   <header>
@@ -151,21 +186,16 @@
 </aside>
 
 <script>
-/* ====================================================== */
-/* ====== BULLETPROOF XLSX LOADER (no <script> tag) ===== */
-/* ====================================================== */
+/* ===== Bulletproof XLSX loader ===== */
 const xlsxReady = new Promise((resolve, reject) => {
   if (window.XLSX) return resolve();
   const s = document.createElement('script');
   s.src = 'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';
-  s.onload  = () => resolve();
+  s.onload = () => resolve();
   s.onerror = () => reject(new Error('Failed to load XLSX library from CDN'));
   document.head.appendChild(s);
 });
 
-/* ====================================================== */
-/* ============== NULL-SAFE HELPERS ===================== */
-/* ====================================================== */
 function $(id){ return document.getElementById(id); }
 function setText(id, value){
   const el = $(id);
@@ -174,14 +204,9 @@ function setText(id, value){
 }
 function setStatus(msg){ setText('status', msg); }
 
-/* ====================================================== */
-/* ============ CURRENT REPORT STATE ==================== */
-/* ====================================================== */
 let currentReport = null;
 
-/* ====================================================== */
-/* ============== UPLOAD HANDLER ======================== */
-/* ====================================================== */
+/* ===== Upload ===== */
 const fileInput = $('fileInput');
 $('uploadBtn').addEventListener('click', () => fileInput.click());
 fileInput.addEventListener('change', handleFile);
@@ -194,7 +219,7 @@ function handleFile(e){
   reader.onerror = () => setStatus('❌ Could not read file.');
   reader.onload = async (evt) => {
     try{
-      await xlsxReady;                                       // wait for XLSX
+      await xlsxReady;
       const data = new Uint8Array(evt.target.result);
       const wb   = XLSX.read(data, { type:'array', cellDates:true });
       const ws   = wb.Sheets[wb.SheetNames[0]];
@@ -226,15 +251,31 @@ function isInternal(email){
   if(!email) return false;
   return /@4sight\.|@4sightholdings\./i.test(String(email));
 }
+function toDate(v){
+  if(!v) return null;
+  if(v instanceof Date && !isNaN(v)) return v;
+  const d=new Date(v); return isNaN(d) ? null : d;
+}
+function median(arr){const s=[...arr].sort((a,b)=>a-b);const m=Math.floor(s.length/2);
+  return s.length%2 ? s[m] : (s[m-1]+s[m])/2;}
+function formatDate(d){if(!d) return '—';
+  return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});}
+function formatTime(d){if(!d) return '—';
+  return d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});}
 
+/* ===== Process rows ===== */
 function processRows(rows, filename){
   let total=rows.length, internal=0, external=0;
   const extRecipients=new Set(), senders=new Set(), responseMins=[];
   let minDate=null, maxDate=null;
 
+  // banner → key(recipient|sender) → person aggregate
+  const bannerMap = new Map();
+
   rows.forEach(r => {
     const recipient = String(pick(r,['Recipient','Recipient Email','To','Receiver','Email','Recipient Address'])).trim();
     const sender    = String(pick(r,['Sender','From','Sender Email','User','Sent By'])).trim();
+    const banner    = String(pick(r,['Banner','Banner Name','Campaign','Campaign Name','Subject','Banner Title'])).trim() || '(Unspecified Banner)';
     const sentRaw   = pick(r,['Sent','Sent Date','Date Sent','Send Date','Email Date']);
     const clickRaw  = pick(r,['Clicked','Click Date','Date Clicked','Click Time','Date','Timestamp']);
 
@@ -252,9 +293,34 @@ function processRows(rows, filename){
       if(!minDate || anyD<minDate) minDate=anyD;
       if(!maxDate || anyD>maxDate) maxDate=anyD;
     }
+
+    // === Banner aggregation ===
+    if(!bannerMap.has(banner)) bannerMap.set(banner, new Map());
+    const peopleMap = bannerMap.get(banner);
+    const key = (recipient||'(unknown)').toLowerCase()+'||'+(sender||'(unknown)').toLowerCase();
+    if(!peopleMap.has(key)){
+      peopleMap.set(key,{
+        recipient: recipient || '(unknown)',
+        sender:    sender    || '(unknown)',
+        clicks: 0,
+        lastClickISO: null
+      });
+    }
+    const p = peopleMap.get(key);
+    p.clicks++;
+    if(clickD && (!p.lastClickISO || clickD > new Date(p.lastClickISO))){
+      p.lastClickISO = clickD.toISOString();
+    }
   });
 
-  const data = {
+  // build banner groups array, sorted by total clicks desc
+  const bannerGroups = [...bannerMap.entries()].map(([name, peopleMap]) => {
+    const people = [...peopleMap.values()].sort((a,b)=>b.clicks-a.clicks);
+    const totalClicks = people.reduce((s,p)=>s+p.clicks,0);
+    return { name, totalClicks, people };
+  }).sort((a,b)=>b.totalClicks-a.totalClicks);
+
+  currentReport = {
     filename: filename || 'Manual entry',
     total, internal, external,
     externalPct: total ? Math.round(external/total*100) : 0,
@@ -264,10 +330,10 @@ function processRows(rows, filename){
     medianResponse: responseMins.length ? median(responseMins) : null,
     minDate: minDate ? minDate.toISOString() : null,
     maxDate: maxDate ? maxDate.toISOString() : null,
+    bannerGroups,
     savedAt: new Date().toISOString()
   };
-  currentReport = data;
-  renderReport(data);
+  renderReport(currentReport);
 }
 
 function renderReport(d){
@@ -283,21 +349,84 @@ function renderReport(d){
   const b = d.maxDate ? new Date(d.maxDate) : null;
   setText('reportPeriod', a && b ? formatDate(a)+' → '+formatDate(b) : '— — —');
   setText('reportDate', formatDate(new Date()));
+  renderBanners(d.bannerGroups||[]);
 }
 
-function toDate(v){
-  if(!v) return null;
-  if(v instanceof Date && !isNaN(v)) return v;
-  const d=new Date(v); return isNaN(d) ? null : d;
-}
-function median(arr){const s=[...arr].sort((a,b)=>a-b);const m=Math.floor(s.length/2);
-  return s.length%2 ? s[m] : (s[m-1]+s[m])/2;}
-function formatDate(d){if(!d) return '—';
-  return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});}
+/* ===== Banner UI ===== */
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,
+  c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 
-/* ====================================================== */
-/* ============== RIGHT-SIDE DRAWER ===================== */
-/* ====================================================== */
+function renderBanners(groups, filter=''){
+  const list = $('bannerList');
+  const q = filter.trim().toLowerCase();
+
+  let filtered = groups;
+  if(q){
+    filtered = groups.map(g => {
+      const bannerMatch = g.name.toLowerCase().includes(q);
+      const people = bannerMatch ? g.people :
+        g.people.filter(p => p.recipient.toLowerCase().includes(q) || p.sender.toLowerCase().includes(q));
+      if(bannerMatch || people.length) return {...g, people};
+      return null;
+    }).filter(Boolean);
+  }
+
+  if(!filtered.length){
+    list.innerHTML = '<div class="empty">No matching banners.</div>';
+    return;
+  }
+
+  list.innerHTML = filtered.map((g,i) => {
+    const rows = g.people.map((p,idx) => {
+      const d = p.lastClickISO ? new Date(p.lastClickISO) : null;
+      return `<tr>
+        <td class="num">${idx+1}</td>
+        <td>${escapeHtml(p.recipient)}</td>
+        <td>${escapeHtml(p.sender)}</td>
+        <td class="num"><span class="badge">${p.clicks}</span></td>
+        <td>${formatDate(d)}</td>
+        <td>${formatTime(d)}</td>
+      </tr>`;
+    }).join('');
+
+    return `
+      <div class="banner-group" data-i="${i}">
+        <button class="banner-btn" type="button">
+          <span class="left">
+            <span class="arrow">▶</span>
+            <span class="title">${escapeHtml(g.name)}</span>
+          </span>
+          <span class="count">${g.totalClicks.toLocaleString()} clicks · ${g.people.length} ${g.people.length===1?'person':'people'}</span>
+        </button>
+        <div class="banner-body">
+          <table class="people">
+            <thead><tr>
+              <th>#</th><th>Recipient</th><th>Sender</th>
+              <th class="num">Clicks</th><th>Last Date</th><th>Last Time</th>
+            </tr></thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+      </div>`;
+  }).join('');
+
+  // Click-to-expand
+  list.querySelectorAll('.banner-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      btn.parentElement.classList.toggle('open');
+    });
+  });
+}
+
+$('bannerSearch').addEventListener('input', e => {
+  if(currentReport) renderBanners(currentReport.bannerGroups||[], e.target.value);
+});
+$('expandAllBtn').addEventListener('click', () =>
+  document.querySelectorAll('.banner-group').forEach(g => g.classList.add('open')));
+$('collapseAllBtn').addEventListener('click', () =>
+  document.querySelectorAll('.banner-group').forEach(g => g.classList.remove('open')));
+
+/* ===== Drawer ===== */
 const drawer=$('drawer'), backdrop=$('backdrop');
 function openDrawer(){ drawer.classList.add('open'); backdrop.classList.add('open'); }
 function closeDrawer(){ drawer.classList.remove('open'); backdrop.classList.remove('open'); }
@@ -306,9 +435,7 @@ $('closeDrawer').addEventListener('click', closeDrawer);
 backdrop.addEventListener('click', closeDrawer);
 document.addEventListener('keydown', e => { if(e.key==='Escape') closeDrawer(); });
 
-/* ====================================================== */
-/* ============ GITHUB GIST INTEGRATION ================= */
-/* ====================================================== */
+/* ===== Gist integration ===== */
 const GIST_DESCRIPTION_TAG = 'Rocketseed Report';
 const ghTokenInput = $('ghToken');
 ghTokenInput.value = localStorage.getItem('gh_token') || '';
@@ -368,17 +495,15 @@ async function loadPastReports(){
           <small>${new Date(g.updated_at).toLocaleString()}</small>
         </div>
         <div class="actions">
-          <button class="icon-btn primary" title="Open report" data-action="open" data-id="${g.id}">📂 Open</button>
-          <button class="icon-btn danger"  title="Delete report" data-action="delete" data-id="${g.id}">🗑️</button>
+          <button class="icon-btn primary" data-action="open"   data-id="${g.id}">📂 Open</button>
+          <button class="icon-btn danger"  data-action="delete" data-id="${g.id}">🗑️</button>
         </div>
       </div>
     `).join('');
-
     list.querySelectorAll('button[data-action]').forEach(btn => {
       btn.addEventListener('click', () => {
-        const id = btn.dataset.id;
-        if(btn.dataset.action==='open')   openReport(id);
-        if(btn.dataset.action==='delete') deleteReport(id);
+        if(btn.dataset.action==='open')   openReport(btn.dataset.id);
+        if(btn.dataset.action==='delete') deleteReport(btn.dataset.id);
       });
     });
   } catch(err){
@@ -411,9 +536,7 @@ async function deleteReport(id){
   try{
     await ghFetch('https://api.github.com/gists/'+id, { method:'DELETE' });
     loadPastReports();
-  } catch(err){
-    alert('Could not delete: '+err.message);
-  }
+  } catch(err){ alert('Could not delete: '+err.message); }
 }
 
 async function saveCurrentReport(){
@@ -434,13 +557,8 @@ async function saveCurrentReport(){
     await ghFetch('https://api.github.com/gists', { method:'POST', body:JSON.stringify(body) });
     setStatus('✅ Saved to Gist: '+label);
     loadPastReports();
-  } catch(err){
-    setStatus('❌ Could not save: '+err.message);
-  }
+  } catch(err){ setStatus('❌ Could not save: '+err.message); }
 }
-
-function escapeHtml(s){return String(s).replace(/[&<>"']/g,
-  c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 
 if(getToken()) loadPastReports();
 </script>
