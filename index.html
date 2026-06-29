@@ -4,128 +4,97 @@
 <meta charset="UTF-8">
 <title>Rocketseed Banner Click Report — 4Sight Holdings</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js
 <style>
   :root{
-    --navy:#0b1e3f;
-    --blue:#0078d4;
-    --red:#c8102e;
-    --grey:#f4f6f9;
-    --border:#e3e6ea;
-    --text:#1f2937;
+    --navy:#0b1e3f; --blue:#0078d4; --red:#c8102e;
+    --grey:#f4f6f9; --border:#e3e6ea; --text:#1f2937;
   }
   *{box-sizing:border-box;}
-  body{
-    font-family:"Segoe UI",Arial,sans-serif;
-    background:var(--grey);
-    margin:0;padding:24px;color:var(--text);
-  }
+  body{font-family:"Segoe UI",Arial,sans-serif;background:var(--grey);margin:0;padding:24px;color:var(--text);}
+
   /* ===== HEADER ===== */
-  .header{
-    background:var(--navy);
-    color:#fff;border-radius:10px;
-    padding:18px 24px;display:flex;align-items:center;gap:20px;
-    box-shadow:0 2px 6px rgba(0,0,0,.08);
-  }
-  .header .logos{display:flex;align-items:center;gap:14px;}
-  .header img{height:46px;}
+  .header{background:var(--navy);color:#fff;border-radius:10px;padding:18px 24px;
+    display:flex;align-items:center;gap:20px;box-shadow:0 2px 6px rgba(0,0,0,.08);}
   .header h1{font-size:22px;margin:0;font-weight:700;}
   .header .sub{font-size:13px;opacity:.85;}
   .header .period{margin-left:auto;font-size:14px;opacity:.9;}
   .header .actions{display:flex;gap:10px;margin-left:16px;}
-  .btn{
-    padding:10px 16px;border:none;border-radius:8px;
-    font-family:inherit;font-size:14px;font-weight:600;
-    cursor:pointer;display:inline-flex;align-items:center;gap:8px;
-  }
+  .btn{padding:10px 16px;border:none;border-radius:8px;font-family:inherit;font-size:14px;
+    font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px;}
   .btn-red{background:var(--red);color:#fff;}
   .btn-blue{background:var(--blue);color:#fff;}
+  .btn-ghost{background:#fff;color:var(--navy);border:1px solid var(--border);}
   .btn:disabled{opacity:.6;cursor:not-allowed;}
 
   /* ===== KPI CARDS ===== */
-  .kpis{
-    display:grid;grid-template-columns:repeat(6,1fr);
-    gap:14px;margin-top:20px;
-  }
-  .card{
-    background:#fff;border-radius:10px;padding:18px;
-    box-shadow:0 1px 3px rgba(0,0,0,.06);
-    border-top:4px solid var(--blue);
-  }
-  .card h4{
-    margin:0 0 8px;font-size:12px;letter-spacing:.5px;
-    text-transform:uppercase;color:#6b7280;
-  }
+  .kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-top:20px;}
+  .card{background:#fff;border-radius:10px;padding:18px;box-shadow:0 1px 3px rgba(0,0,0,.06);
+    border-top:4px solid var(--blue);}
+  .card h4{margin:0 0 8px;font-size:12px;letter-spacing:.5px;text-transform:uppercase;color:#6b7280;}
   .card .value{font-size:28px;font-weight:800;color:var(--navy);}
   .card .sub{font-size:12px;color:#6b7280;margin-top:4px;}
-  .card.green{border-top-color:#16a34a;}
-  .card.amber{border-top-color:#d97706;}
-  .card.red{border-top-color:var(--red);}
-  .card.purple{border-top-color:#7c3aed;}
+  .card.green{border-top-color:#16a34a;} .card.amber{border-top-color:#d97706;}
+  .card.red{border-top-color:var(--red);} .card.purple{border-top-color:#7c3aed;}
   .card.navy{border-top-color:var(--navy);}
 
   /* ===== STATUS ===== */
-  .status{
-    margin-top:18px;padding:12px 16px;background:#eaf3ff;
-    border-radius:8px;font-size:13px;color:#1f3a5f;
-  }
-
-  /* ===== PAST REPORTS PANEL ===== */
-  .panel{
-    background:#fff;border-radius:10px;margin-top:20px;
-    padding:18px 22px;box-shadow:0 1px 3px rgba(0,0,0,.06);
-    display:none;
-  }
-  .panel.open{display:block;}
-  .panel h3{margin:0 0 10px;color:var(--navy);}
-  .panel input[type="password"]{
-    width:100%;padding:10px;border:1px solid var(--border);
-    border-radius:6px;font-family:inherit;font-size:14px;
-  }
-  .panel .row{display:flex;gap:10px;margin-top:10px;align-items:center;}
-  .panel small{color:#6b7280;}
-  #pastList{margin-top:14px;max-height:240px;overflow-y:auto;}
-  #pastList .item{
-    padding:10px;border:1px solid var(--border);border-radius:6px;
-    margin-bottom:6px;display:flex;justify-content:space-between;
-    align-items:center;cursor:pointer;
-  }
-  #pastList .item:hover{background:#f9fafb;}
+  .status{margin-top:18px;padding:12px 16px;background:#eaf3ff;border-radius:8px;
+    font-size:13px;color:#1f3a5f;}
 
   /* ===== FOOTER ===== */
-  .footer{
-    text-align:center;margin-top:28px;font-size:12px;color:#6b7280;
-  }
+  .footer{text-align:center;margin-top:28px;font-size:12px;color:#6b7280;}
   .footer b{color:var(--blue);}
 
-  /* ===== FILE INPUT (hidden) ===== */
-  #fileInput{display:none;}
+  /* ===== RIGHT-SIDE DRAWER ===== */
+  .backdrop{position:fixed;inset:0;background:rgba(0,0,0,.4);opacity:0;visibility:hidden;
+    transition:opacity .25s ease;z-index:998;}
+  .backdrop.open{opacity:1;visibility:visible;}
+  .drawer{position:fixed;top:0;right:0;height:100vh;width:420px;max-width:90vw;
+    background:#fff;box-shadow:-4px 0 16px rgba(0,0,0,.15);transform:translateX(100%);
+    transition:transform .3s cubic-bezier(.4,0,.2,1);z-index:999;display:flex;flex-direction:column;}
+  .drawer.open{transform:translateX(0);}
+  .drawer header{padding:18px 22px;background:var(--navy);color:#fff;
+    display:flex;justify-content:space-between;align-items:center;}
+  .drawer header h3{margin:0;font-size:18px;}
+  .drawer .close{background:transparent;border:none;color:#fff;font-size:22px;cursor:pointer;line-height:1;}
+  .drawer .body{padding:18px 22px;overflow-y:auto;flex:1;}
+  .drawer small{color:#6b7280;}
+  .drawer input[type="password"]{width:100%;padding:10px;border:1px solid var(--border);
+    border-radius:6px;font-family:inherit;font-size:14px;}
+  .drawer .row{display:flex;gap:8px;margin-top:10px;align-items:center;flex-wrap:wrap;}
+  #pastList{margin-top:16px;}
+  #pastList .item{padding:12px;border:1px solid var(--border);border-radius:8px;margin-bottom:8px;
+    display:flex;justify-content:space-between;align-items:center;gap:10px;transition:background .15s;}
+  #pastList .item:hover{background:#f9fafb;}
+  #pastList .item .info{flex:1;min-width:0;}
+  #pastList .item .info b{color:var(--navy);display:block;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  #pastList .item .info small{color:#6b7280;}
+  #pastList .item .actions{display:flex;gap:6px;flex-shrink:0;}
+  .icon-btn{background:transparent;border:1px solid var(--border);border-radius:6px;
+    padding:6px 10px;cursor:pointer;font-size:14px;transition:all .15s;}
+  .icon-btn:hover{background:#f3f4f6;}
+  .icon-btn.danger:hover{background:#fee2e2;border-color:var(--red);color:var(--red);}
+  .icon-btn.primary:hover{background:#dbeafe;border-color:var(--blue);color:var(--blue);}
 
-  @media (max-width:1100px){
-    .kpis{grid-template-columns:repeat(3,1fr);}
-  }
-  @media (max-width:640px){
-    .kpis{grid-template-columns:repeat(2,1fr);}
-    .header{flex-wrap:wrap;}
-    .header .period,.header .actions{margin-left:0;width:100%;}
-  }
+  #fileInput{display:none;}
+  @media (max-width:1100px){.kpis{grid-template-columns:repeat(3,1fr);}}
+  @media (max-width:640px){.kpis{grid-template-columns:repeat(2,1fr);}
+    .header{flex-wrap:wrap;}.header .period,.header .actions{margin-left:0;width:100%;}}
 </style>
 </head>
 <body>
 
 <!-- ===== HEADER ===== -->
 <div class="header">
-  <div class="logos">
-    <img src="https://www.4sight.cloud/wp-content/uploads/2021/04/4Sight-Logo-White.png" alt="4Sight" onerror="this.style.display='none'">
-    <img src="https://www.4sight.cloud/wp-content/uploads/2023/04/4AI-Logo-White.png" alt="4AI" onerror="this.style.display='none'">
-  </div>
   <div>
     <h1>Rocketseed Banner Click Report — 4Sight Holdings</h1>
     <div class="sub">Marketing Intelligence</div>
   </div>
   <div class="period">📅 <span id="reportPeriod">— — —</span></div>
   <div class="actions">
-    <button class="btn btn-red" id="pastBtn">📁 Past Reports</button>
+    <button class="btn btn-red"  id="pastBtn">📁 Past Reports</button>
     <button class="btn btn-blue" id="uploadBtn">⬆️ Upload</button>
     <input type="file" id="fileInput" accept=".xlsx,.xls,.csv">
   </div>
@@ -133,52 +102,24 @@
 
 <!-- ===== KPI CARDS ===== -->
 <div class="kpis">
-  <div class="card">
-    <h4>Total Clicks</h4>
-    <div class="value" id="totalClicks">XXX</div>
-    <div class="sub">All recorded clicks</div>
-  </div>
-  <div class="card green">
-    <h4>External Clicks</h4>
+  <div class="card"><h4>Total Clicks</h4>
+    <div class="value" id="totalClicks">XXX</div><div class="sub">All recorded clicks</div></div>
+  <div class="card green"><h4>External Clicks</h4>
     <div class="value" id="externalClicks">XXX</div>
-    <div class="sub"><span id="externalPct">XX%</span> of total</div>
-  </div>
-  <div class="card amber">
-    <h4>Internal Clicks</h4>
+    <div class="sub"><span id="externalPct">XX%</span> of total</div></div>
+  <div class="card amber"><h4>Internal Clicks</h4>
     <div class="value" id="internalClicks">XXX</div>
-    <div class="sub"><span id="internalPct">XX%</span> of total</div>
-  </div>
-  <div class="card purple">
-    <h4>Unique Ext. Recipients</h4>
+    <div class="sub"><span id="internalPct">XX%</span> of total</div></div>
+  <div class="card purple"><h4>Unique Ext. Recipients</h4>
     <div class="value" id="uniqueRecipients">XXX</div>
-    <div class="sub">Distinct external contacts</div>
-  </div>
-  <div class="card red">
-    <h4>4Sight Senders (Ext.)</h4>
-    <div class="value" id="senders">XXX</div>
-    <div class="sub">Active 4Sight users</div>
-  </div>
-  <div class="card navy">
-    <h4>Median Response Time</h4>
-    <div class="value" id="medianResponse">XX min</div>
-    <div class="sub">Time-to-click</div>
-  </div>
+    <div class="sub">Distinct external contacts</div></div>
+  <div class="card red"><h4>4Sight Senders (Ext.)</h4>
+    <div class="value" id="senders">XXX</div><div class="sub">Active 4Sight users</div></div>
+  <div class="card navy"><h4>Median Response Time</h4>
+    <div class="value" id="medianResponse">XX min</div><div class="sub">Time-to-click</div></div>
 </div>
 
 <div class="status" id="status">No matching results found</div>
-
-<!-- ===== PAST REPORTS PANEL ===== -->
-<div class="panel" id="pastPanel">
-  <h3>📁 Past Reports</h3>
-  <small>Stored in your private GitHub Gist. Paste a Personal Access Token (classic) with the <b>gist</b> scope. The token is saved only in your browser.</small>
-  <div class="row">
-    <input type="password" id="ghToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxx">
-    <button class="btn btn-blue" id="saveTokenBtn">Save</button>
-    <button class="btn btn-red"  id="clearTokenBtn">Clear</button>
-  </div>
-  <div class="row"><small id="ghStatus">Not connected — paste your GitHub token above.</small></div>
-  <div id="pastList"><small>🔑 Enter your GitHub token above to load saved reports.</small></div>
-</div>
 
 <!-- ===== FOOTER ===== -->
 <div class="footer">
@@ -186,9 +127,33 @@
   Data source: Rocketseed Click Track Export
 </div>
 
+<!-- ===== RIGHT-SIDE DRAWER ===== -->
+<div class="backdrop" id="backdrop"></div>
+<aside class="drawer" id="drawer">
+  <header>
+    <h3>📁 Past Reports</h3>
+    <button class="close" id="closeDrawer" aria-label="Close">✕</button>
+  </header>
+  <div class="body">
+    <small>Stored in your private GitHub Gist. Paste a Personal Access Token (classic) with the <b>gist</b> scope. The token is saved only in your browser.</small>
+    <input type="password" id="ghToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxx" style="margin-top:10px;">
+    <div class="row">
+      <button class="btn btn-blue" id="saveTokenBtn">Save</button>
+      <button class="btn btn-red"  id="clearTokenBtn">Clear</button>
+      <button class="btn btn-ghost" id="refreshBtn">🔄 Refresh</button>
+    </div>
+    <div class="row"><small id="ghStatus">Not connected — paste your GitHub token above.</small></div>
+    <hr style="margin:18px 0;border:none;border-top:1px solid var(--border);">
+    <button class="btn btn-blue" id="saveReportBtn" style="width:100%;">💾 Save Current Report to Gist</button>
+    <div id="pastList" style="margin-top:16px;">
+      <small>🔑 Enter your GitHub token above to load saved reports.</small>
+    </div>
+  </div>
+</aside>
+
 <script>
 /* ====================================================== */
-/* ========== NULL-SAFE HELPERS (fix for crash) ========= */
+/* ============== NULL-SAFE HELPERS ===================== */
 /* ====================================================== */
 function $(id){ return document.getElementById(id); }
 function setText(id, value){
@@ -199,7 +164,12 @@ function setText(id, value){
 function setStatus(msg){ setText('status', msg); }
 
 /* ====================================================== */
-/* ================== UPLOAD HANDLER ==================== */
+/* ============ CURRENT REPORT STATE ==================== */
+/* ====================================================== */
+let currentReport = null;   // last processed data (for saving)
+
+/* ====================================================== */
+/* ============== UPLOAD HANDLER ======================== */
 /* ====================================================== */
 const fileInput = $('fileInput');
 $('uploadBtn').addEventListener('click', () => fileInput.click());
@@ -209,7 +179,6 @@ function handleFile(e){
   const file = e.target.files && e.target.files[0];
   if(!file) return;
   setStatus('⏳ Reading file: ' + file.name);
-
   const reader = new FileReader();
   reader.onerror = () => setStatus('❌ Could not read file.');
   reader.onload = (evt) => {
@@ -218,13 +187,8 @@ function handleFile(e){
       const wb   = XLSX.read(data, { type:'array', cellDates:true });
       const ws   = wb.Sheets[wb.SheetNames[0]];
       const rows = XLSX.utils.sheet_to_json(ws, { defval:'' });
-
-      if(!rows.length){
-        setStatus('⚠️ The file is empty.');
-        resetKpis();
-        return;
-      }
-      processRows(rows);
+      if(!rows.length){ setStatus('⚠️ The file is empty.'); return; }
+      processRows(rows, file.name);
       setStatus(`✅ Loaded ${rows.length.toLocaleString()} rows from ${file.name}`);
     } catch(err){
       console.error(err);
@@ -234,165 +198,239 @@ function handleFile(e){
   reader.readAsArrayBuffer(file);
 }
 
-/* ====================================================== */
-/* ============ FLEXIBLE COLUMN LOOKUP ================== */
-/* ====================================================== */
 function pick(row, aliases){
   const keys = Object.keys(row);
   for(const a of aliases){
-    const found = keys.find(k => k.toLowerCase().trim() === a.toLowerCase());
-    if(found) return row[found];
+    const f = keys.find(k => k.toLowerCase().trim() === a.toLowerCase());
+    if(f) return row[f];
   }
-  // partial match fallback
   for(const a of aliases){
-    const found = keys.find(k => k.toLowerCase().includes(a.toLowerCase()));
-    if(found) return row[found];
+    const f = keys.find(k => k.toLowerCase().includes(a.toLowerCase()));
+    if(f) return row[f];
   }
   return '';
 }
-
 function isInternal(email){
   if(!email) return false;
-  const e = String(email).toLowerCase();
-  return /@4sight\.|@4sightholdings\./.test(e);
+  return /@4sight\.|@4sightholdings\./i.test(String(email));
 }
 
-/* ====================================================== */
-/* ================== MAIN PROCESSOR ==================== */
-/* ====================================================== */
-function processRows(rows){
-  let total = rows.length;
-  let internal = 0, external = 0;
-  const extRecipients = new Set();
-  const senders = new Set();
-  const responseMins = [];
-  let minDate = null, maxDate = null;
+function processRows(rows, filename){
+  let total=rows.length, internal=0, external=0;
+  const extRecipients=new Set(), senders=new Set(), responseMins=[];
+  let minDate=null, maxDate=null;
 
   rows.forEach(r => {
-    const recipient = String(pick(r, ['Recipient','Recipient Email','To','Receiver','Email','Recipient Address'])).trim();
-    const sender    = String(pick(r, ['Sender','From','Sender Email','User','Sent By'])).trim();
-    const sentRaw   = pick(r, ['Sent','Sent Date','Date Sent','Send Date','Email Date']);
-    const clickRaw  = pick(r, ['Clicked','Click Date','Date Clicked','Click Time','Date','Timestamp']);
+    const recipient = String(pick(r,['Recipient','Recipient Email','To','Receiver','Email','Recipient Address'])).trim();
+    const sender    = String(pick(r,['Sender','From','Sender Email','User','Sent By'])).trim();
+    const sentRaw   = pick(r,['Sent','Sent Date','Date Sent','Send Date','Email Date']);
+    const clickRaw  = pick(r,['Clicked','Click Date','Date Clicked','Click Time','Date','Timestamp']);
 
-    if(isInternal(recipient)){
-      internal++;
-    } else if(recipient){
-      external++;
-      extRecipients.add(recipient.toLowerCase());
-    }
-
+    if(isInternal(recipient)) internal++;
+    else if(recipient){ external++; extRecipients.add(recipient.toLowerCase()); }
     if(sender) senders.add(sender.toLowerCase());
 
-    const sentD  = toDate(sentRaw);
-    const clickD = toDate(clickRaw);
+    const sentD=toDate(sentRaw), clickD=toDate(clickRaw);
     if(sentD && clickD){
-      const diff = (clickD - sentD) / 60000; // minutes
-      if(diff >= 0 && diff < 60*24*30) responseMins.push(diff);
+      const diff=(clickD-sentD)/60000;
+      if(diff>=0 && diff<60*24*30) responseMins.push(diff);
     }
     const anyD = clickD || sentD;
     if(anyD){
-      if(!minDate || anyD < minDate) minDate = anyD;
-      if(!maxDate || anyD > maxDate) maxDate = anyD;
+      if(!minDate || anyD<minDate) minDate=anyD;
+      if(!maxDate || anyD>maxDate) maxDate=anyD;
     }
   });
 
-  /* ===== Write KPIs (null-safe) ===== */
-  setText('totalClicks',   total.toLocaleString());
-  setText('externalClicks', external.toLocaleString());
-  setText('internalClicks', internal.toLocaleString());
-  setText('externalPct',  total ? Math.round(external/total*100) + '%' : '0%');
-  setText('internalPct',  total ? Math.round(internal/total*100) + '%' : '0%');
-  setText('uniqueRecipients', extRecipients.size.toLocaleString());
-  setText('senders', senders.size.toLocaleString());
-  setText('medianResponse', responseMins.length ? median(responseMins).toFixed(1) + ' min' : '—');
-  setText('reportPeriod', formatPeriod(minDate, maxDate));
-  setText('reportDate',   formatDate(new Date()));
+  const data = {
+    filename: filename || 'Manual entry',
+    total, internal, external,
+    externalPct: total ? Math.round(external/total*100) : 0,
+    internalPct: total ? Math.round(internal/total*100) : 0,
+    uniqueRecipients: extRecipients.size,
+    senders: senders.size,
+    medianResponse: responseMins.length ? median(responseMins) : null,
+    minDate: minDate ? minDate.toISOString() : null,
+    maxDate: maxDate ? maxDate.toISOString() : null,
+    savedAt: new Date().toISOString()
+  };
+  currentReport = data;
+  renderReport(data);
 }
 
-function resetKpis(){
-  ['totalClicks','externalClicks','internalClicks','uniqueRecipients','senders'].forEach(id => setText(id,'0'));
-  setText('externalPct','0%'); setText('internalPct','0%');
-  setText('medianResponse','—'); setText('reportPeriod','— — —');
+function renderReport(d){
+  setText('totalClicks',   (d.total||0).toLocaleString());
+  setText('externalClicks',(d.external||0).toLocaleString());
+  setText('internalClicks',(d.internal||0).toLocaleString());
+  setText('externalPct',   (d.externalPct||0)+'%');
+  setText('internalPct',   (d.internalPct||0)+'%');
+  setText('uniqueRecipients',(d.uniqueRecipients||0).toLocaleString());
+  setText('senders',       (d.senders||0).toLocaleString());
+  setText('medianResponse',d.medianResponse!=null ? d.medianResponse.toFixed(1)+' min' : '—');
+  const a = d.minDate ? new Date(d.minDate) : null;
+  const b = d.maxDate ? new Date(d.maxDate) : null;
+  setText('reportPeriod', a && b ? formatDate(a)+' → '+formatDate(b) : '— — —');
+  setText('reportDate', formatDate(new Date()));
 }
 
-/* ====================================================== */
-/* ====================== UTILS ========================= */
-/* ====================================================== */
 function toDate(v){
   if(!v) return null;
   if(v instanceof Date && !isNaN(v)) return v;
-  const d = new Date(v);
-  return isNaN(d) ? null : d;
+  const d=new Date(v); return isNaN(d) ? null : d;
 }
-function median(arr){
-  const s = [...arr].sort((a,b)=>a-b);
-  const m = Math.floor(s.length/2);
-  return s.length % 2 ? s[m] : (s[m-1]+s[m])/2;
-}
-function formatDate(d){
-  if(!d) return '—';
-  return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
-}
-function formatPeriod(a,b){
-  if(!a || !b) return '— — —';
-  return formatDate(a) + ' → ' + formatDate(b);
-}
+function median(arr){const s=[...arr].sort((a,b)=>a-b);const m=Math.floor(s.length/2);
+  return s.length%2 ? s[m] : (s[m-1]+s[m])/2;}
+function formatDate(d){if(!d) return '—';
+  return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});}
 
 /* ====================================================== */
-/* ============ PAST REPORTS / GITHUB GIST ============== */
+/* ============== RIGHT-SIDE DRAWER ===================== */
 /* ====================================================== */
-const pastBtn   = $('pastBtn');
-const pastPanel = $('pastPanel');
-pastBtn.addEventListener('click', () => pastPanel.classList.toggle('open'));
+const drawer=$('drawer'), backdrop=$('backdrop');
+function openDrawer(){ drawer.classList.add('open'); backdrop.classList.add('open'); }
+function closeDrawer(){ drawer.classList.remove('open'); backdrop.classList.remove('open'); }
+$('pastBtn').addEventListener('click', openDrawer);
+$('closeDrawer').addEventListener('click', closeDrawer);
+backdrop.addEventListener('click', closeDrawer);
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeDrawer(); });
 
+/* ====================================================== */
+/* ============ GITHUB GIST INTEGRATION ================= */
+/* ====================================================== */
+const GIST_DESCRIPTION_TAG = 'Rocketseed Report';
 const ghTokenInput = $('ghToken');
 ghTokenInput.value = localStorage.getItem('gh_token') || '';
 updateGhStatus();
 
 $('saveTokenBtn').addEventListener('click', () => {
   localStorage.setItem('gh_token', ghTokenInput.value.trim());
-  updateGhStatus();
-  loadPastReports();
+  updateGhStatus(); loadPastReports();
 });
 $('clearTokenBtn').addEventListener('click', () => {
-  localStorage.removeItem('gh_token');
-  ghTokenInput.value = '';
-  updateGhStatus();
-  $('pastList').innerHTML = '<small>🔑 Enter your GitHub token above to load saved reports.</small>';
+  localStorage.removeItem('gh_token'); ghTokenInput.value=''; updateGhStatus();
+  $('pastList').innerHTML='<small>🔑 Enter your GitHub token above to load saved reports.</small>';
 });
+$('refreshBtn').addEventListener('click', loadPastReports);
+$('saveReportBtn').addEventListener('click', saveCurrentReport);
 
+function getToken(){ return (ghTokenInput.value||'').trim(); }
 function updateGhStatus(){
-  const t = (ghTokenInput.value || '').trim();
-  setText('ghStatus', t ? '✅ Token saved in this browser.' : 'Not connected — paste your GitHub token above.');
+  setText('ghStatus', getToken() ? '✅ Token saved in this browser.'
+    : 'Not connected — paste your GitHub token above.');
+}
+
+async function ghFetch(url, options={}){
+  const token = getToken();
+  if(!token) throw new Error('No GitHub token');
+  const res = await fetch(url, {
+    ...options,
+    headers:{
+      Authorization:'token '+token,
+      Accept:'application/vnd.github+json',
+      ...(options.headers||{})
+    }
+  });
+  if(!res.ok){
+    const txt = await res.text().catch(()=>'');
+    throw new Error('GitHub API '+res.status+' '+txt.slice(0,140));
+  }
+  return res.json();
 }
 
 async function loadPastReports(){
-  const token = (ghTokenInput.value || '').trim();
   const list = $('pastList');
-  if(!token){ list.innerHTML = '<small>🔑 Enter your GitHub token above.</small>'; return; }
+  if(!getToken()){ list.innerHTML='<small>🔑 Enter your GitHub token above.</small>'; return; }
   list.innerHTML = '<small>⏳ Loading…</small>';
   try{
-    const res = await fetch('https://api.github.com/gists?per_page=30',{
-      headers:{ Authorization:'token ' + token, Accept:'application/vnd.github+json' }
+    const gists = await ghFetch('https://api.github.com/gists?per_page=100');
+    const reports = gists.filter(g => (g.description||'').includes(GIST_DESCRIPTION_TAG));
+    if(!reports.length){
+      list.innerHTML='<small>No saved reports yet. Upload a file and click <b>Save Current Report</b>.</small>';
+      return;
+    }
+    list.innerHTML = reports.map(g => `
+      <div class="item" data-id="${g.id}">
+        <div class="info">
+          <b>${escapeHtml(g.description.replace(GIST_DESCRIPTION_TAG,'').replace(/^[—–-]\s*/,'').trim() || 'Untitled')}</b>
+          <small>${new Date(g.updated_at).toLocaleString()}</small>
+        </div>
+        <div class="actions">
+          <button class="icon-btn primary" title="Open report" data-action="open" data-id="${g.id}">📂 Open</button>
+          <button class="icon-btn danger"  title="Delete report" data-action="delete" data-id="${g.id}">🗑️</button>
+        </div>
+      </div>
+    `).join('');
+
+    list.querySelectorAll('button[data-action]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.id;
+        if(btn.dataset.action==='open')   openReport(id);
+        if(btn.dataset.action==='delete') deleteReport(id);
+      });
     });
-    if(!res.ok) throw new Error('GitHub API ' + res.status);
-    const gists = await res.json();
-    const reports = gists.filter(g => (g.description||'').includes('Rocketseed Report'));
-    if(!reports.length){ list.innerHTML = '<small>No saved reports found.</small>'; return; }
-    list.innerHTML = reports.map(g =>
-      `<div class="item">
-         <div><b>${escapeHtml(g.description||'Untitled')}</b><br>
-         <small>${new Date(g.updated_at).toLocaleString()}</small></div>
-         <a href="${g.html_url}" target="_blank">Open ↗</a>
-       </div>`).join('');
   } catch(err){
-    list.innerHTML = '<small>❌ Could not load gists: ' + escapeHtml(err.message) + '</small>';
+    list.innerHTML='<small>❌ Could not load gists: '+escapeHtml(err.message)+'</small>';
   }
 }
-function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
-/* Auto-load on start if token present */
-if(localStorage.getItem('gh_token')) loadPastReports();
+async function openReport(id){
+  setStatus('⏳ Loading saved report…');
+  try{
+    const g = await ghFetch('https://api.github.com/gists/'+id);
+    const file = Object.values(g.files).find(f => f.filename.endsWith('.json')) || Object.values(g.files)[0];
+    if(!file) throw new Error('No data file in gist');
+    let content = file.content;
+    if(file.truncated && file.raw_url){
+      content = await (await fetch(file.raw_url)).text();
+    }
+    const data = JSON.parse(content);
+    currentReport = data;
+    renderReport(data);
+    setStatus('✅ Loaded report: '+(data.filename||'(saved report)'));
+    closeDrawer();
+  } catch(err){
+    setStatus('❌ Could not open report: '+err.message);
+  }
+}
+
+async function deleteReport(id){
+  if(!confirm('Delete this saved report permanently?')) return;
+  try{
+    await ghFetch('https://api.github.com/gists/'+id, { method:'DELETE' });
+    loadPastReports();
+  } catch(err){
+    alert('Could not delete: '+err.message);
+  }
+}
+
+async function saveCurrentReport(){
+  if(!currentReport){ alert('Upload a report first.'); return; }
+  if(!getToken()){ alert('Save your GitHub token first.'); return; }
+  const label = prompt('Name this report:',
+    currentReport.filename || ('Rocketseed Report '+new Date().toLocaleDateString()));
+  if(label===null) return;
+  setStatus('⏳ Saving report to Gist…');
+  try{
+    const body = {
+      description: GIST_DESCRIPTION_TAG+' — '+label,
+      public:false,
+      files:{
+        ['rocketseed-'+Date.now()+'.json']:{ content: JSON.stringify(currentReport,null,2) }
+      }
+    };
+    await ghFetch('https://api.github.com/gists', { method:'POST', body:JSON.stringify(body) });
+    setStatus('✅ Saved to Gist: '+label);
+    loadPastReports();
+  } catch(err){
+    setStatus('❌ Could not save: '+err.message);
+  }
+}
+
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,
+  c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+/* Auto-load list if token present */
+if(getToken()) loadPastReports();
 </script>
 
 </body>
