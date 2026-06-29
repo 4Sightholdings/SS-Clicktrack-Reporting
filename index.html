@@ -2,25 +2,19 @@
 <html>
 <head>
 <meta charset="UTF-8">
-
 <title>4Sight Click Intelligence</title>
-
 <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
-
 <style>
-
 body {
-    font-family: Segoe UI;
+    font-family: 'Segoe UI', sans-serif;
     background: radial-gradient(circle at top,#0a2a5e,#001833 80%);
     color:white;
     padding:20px;
 }
-
 /* HEADER */
 .header { text-align:center; margin-bottom:20px; }
 .header h1 { font-size:36px; }
 .subtitle { color:#9bb7ff; }
-
 /* FILTERS */
 .filters {
     display:flex;
@@ -32,9 +26,10 @@ input,select,button {
     padding:10px;
     border-radius:8px;
     border:none;
+    font-family: 'Segoe UI', sans-serif;
 }
 button { background:#0078d4; color:white; cursor:pointer; }
-
+button:hover { background:#005ea6; }
 /* DASHBOARD */
 .dashboard {
     display:flex;
@@ -50,7 +45,6 @@ button { background:#0078d4; color:white; cursor:pointer; }
     text-align:center;
 }
 .value { font-size:22px; font-weight:bold; }
-
 /* TABS */
 .tabs { display:flex; justify-content:center; margin-bottom:15px; }
 .tab {
@@ -61,22 +55,18 @@ button { background:#0078d4; color:white; cursor:pointer; }
     cursor:pointer;
 }
 .tab.active { background:white; color:#002f6c; }
-
 /* CLUSTER */
 .cluster { display:none; }
 .cluster.active { display:block; }
-
 /* COLORS */
 .cp { background:#ff4d4d; }
 .be { background:#4da6ff; }
 .it { background:#ffd633; color:black; }
 .ot { background:#33cc99; }
-
 .cluster-title {
     padding:10px;
     border-radius:6px;
 }
-
 /* BANNER GROUP */
 .banner-block {
     margin-top:10px;
@@ -84,7 +74,6 @@ button { background:#0078d4; color:white; cursor:pointer; }
     border-radius:8px;
     background:rgba(255,255,255,0.08);
 }
-
 /* TABLE */
 table {
     width:100%;
@@ -98,245 +87,264 @@ td {
     padding:6px;
     border-bottom:1px solid rgba(255,255,255,0.1);
 }
-
 tr:hover td {
     background:rgba(255,255,255,0.05);
 }
-
 </style>
 </head>
-
 <body>
-
 <div class="header">
-<h1>4Sight Click Intelligence</h1>
-<div class="subtitle">Interactive Campaign Engagement Dashboard</div>
+    <h1>4Sight Click Intelligence</h1>
+    <div class="subtitle">Interactive Campaign Engagement Dashboard</div>
 </div>
-
 <div class="filters">
-<input type="file" id="fileInput">
-<button id="deployBtn">Deploy</button>
-
-<select id="monthFilter">
-<option value="all">All Months</option>
-</select>
-
-<select id="weekFilter">
-<option value="all">All Weeks</option>
-</select>
+    <input type="file" id="fileInput" accept=".xlsx,.xls,.csv">
+    <button id="deployBtn">Deploy</button>
+    <select id="monthFilter">
+        <option value="all">All Months</option>
+    </select>
+    <select id="weekFilter">
+        <option value="all">All Weeks</option>
+    </select>
 </div>
-
 <div class="dashboard">
-<div class="card"><div id="total" class="value">--</div>Total</div>
-<div class="card"><div id="leads" class="value">--</div>Leads</div>
-<div class="card"><div id="recipients" class="value">--</div>Recipients</div>
-<div class="card"><div id="senders" class="value">--</div>Senders</div>
+    <div class="card"><div id="total" class="value">--</div>Total</div>
+    <div class="card"><div id="leads" class="value">--</div>Leads</div>
+    <div class="card"><div id="recipients" class="value">--</div>Recipients</div>
+    <div class="card"><div id="senders" class="value">--</div>Senders</div>
 </div>
-
 <div class="tabs">
-<div class="tab active" onclick="showCluster('CP')" id="tab-CP">CP</div>
-<div class="tab" onclick="showCluster('BE')" id="tab-BE">BE</div>
-<div class="tab" onclick="showCluster('IT')" id="tab-IT">IT</div>
-<div class="tab" onclick="showCluster('OT')" id="tab-OT">OT</div>
+    <div class="tab active" data-cluster="CP" id="tab-CP">CP</div>
+    <div class="tab" data-cluster="BE" id="tab-BE">BE</div>
+    <div class="tab" data-cluster="IT" id="tab-IT">IT</div>
+    <div class="tab" data-cluster="OT" id="tab-OT">OT</div>
 </div>
-
 <div id="CP" class="cluster active"><div class="cluster-title cp">Channel Partner</div><div id="cpTable"></div></div>
 <div id="BE" class="cluster"><div class="cluster-title be">Business Environment</div><div id="beTable"></div></div>
 <div id="IT" class="cluster"><div class="cluster-title it">Information Technology</div><div id="itTable"></div></div>
 <div id="OT" class="cluster"><div class="cluster-title ot">Operational Technology</div><div id="otTable"></div></div>
 
 <script>
+document.addEventListener("DOMContentLoaded", function () {
 
-let rawData=[];
+    // ---------- EXPLICIT DOM REFERENCES ----------
+    const fileInput     = document.getElementById("fileInput");
+    const deployBtn     = document.getElementById("deployBtn");
+    const monthFilter   = document.getElementById("monthFilter");
+    const weekFilter    = document.getElementById("weekFilter");
+    const totalEl       = document.getElementById("total");
+    const leadsEl       = document.getElementById("leads");
+    const recipientsEl  = document.getElementById("recipients");
+    const sendersEl     = document.getElementById("senders");
 
-// TAB SWITCH
-function showCluster(c){
-    document.querySelectorAll(".cluster").forEach(x=>x.classList.remove("active"));
-    document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
-    document.getElementById(c).classList.add("active");
-    document.getElementById("tab-"+c).classList.add("active");
-}
+    let rawData = [];
 
-// LOAD FILE
-fileInput.addEventListener("change", e=>{
-    let reader=new FileReader();
-    reader.onload=(evt)=>{
-        let wb=XLSX.read(evt.target.result,{type:'array'});
-        rawData=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
-        alert("File loaded ✅");
-    };
-    reader.readAsArrayBuffer(e.target.files[0]);
-});
-
-// DEPLOY
-deployBtn.addEventListener("click",()=>{
-    if(rawData.length===0){
-        alert("Upload a file first");
-        return;
+    // ---------- TAB SWITCH ----------
+    function showCluster(c) {
+        document.querySelectorAll(".cluster").forEach(x => x.classList.remove("active"));
+        document.querySelectorAll(".tab").forEach(x => x.classList.remove("active"));
+        document.getElementById(c).classList.add("active");
+        document.getElementById("tab-" + c).classList.add("active");
     }
-    setupFilters();
-    processData();
-});
+    // Attach tab listeners (replaces inline onclick)
+    document.querySelectorAll(".tab").forEach(tab => {
+        tab.addEventListener("click", () => showCluster(tab.dataset.cluster));
+    });
 
-// FILTER SETUP
-function setupFilters(){
-
-    monthFilter.innerHTML="<option value='all'>All Months</option>";
-    weekFilter.innerHTML="<option value='all'>All Weeks</option>";
-
-    let months=new Set(), weeks=new Set();
-
-    rawData.forEach(d=>{
-        let dt=new Date(d["Time Clicked"]);
-        if(!isNaN(dt)){
-            months.add(dt.getMonth());
-            weeks.add(getWeek(dt));
+    // ---------- HELPERS ----------
+    // Convert Excel serial number OR string to a JS Date
+    function parseDate(val) {
+        if (val == null || val === "") return null;
+        if (val instanceof Date) return isNaN(val) ? null : val;
+        if (typeof val === "number") {
+            // Excel epoch: Dec 30, 1899
+            const ms = Math.round((val - 25569) * 86400 * 1000);
+            const d = new Date(ms);
+            return isNaN(d) ? null : d;
         }
-    });
+        const d = new Date(val);
+        return isNaN(d) ? null : d;
+    }
 
-    months.forEach(m=>{
-        let o=document.createElement("option");
-        o.value=m;
-        o.text="Month "+(m+1);
-        monthFilter.add(o);
-    });
+    function getWeek(d) {
+        const start = new Date(d.getFullYear(), 0, 1);
+        return Math.ceil(((d - start) / 86400000 + start.getDay() + 1) / 7);
+    }
 
-    [...weeks].sort().forEach(w=>{
-        let o=document.createElement("option");
-        o.value=w;
-        o.text="Week "+w;
-        weekFilter.add(o);
-    });
-}
+    function sanitize(text) {
+        return (text || "").toString().replace(/[^\x20-\x7E]/g, "");
+    }
 
-function getWeek(d){
-    let start=new Date(d.getFullYear(),0,1);
-    return Math.ceil(((d-start)/86400000+start.getDay()+1)/7);
-}
-
-// PROCESS DATA
-function processData(){
-
-    let m=monthFilter.value;
-    let w=weekFilter.value;
-
-    let clean=rawData.filter(d =>
-        !["Logo","Facebook","LinkedIn","Youtube"].includes(d.Tracker)
-    );
-
-    // FILTER
-    clean=clean.filter(d=>{
-        let dt=new Date(d["Time Clicked"]);
-        if(m!="all" && dt.getMonth()!=m) return false;
-        if(w!="all" && getWeek(dt)!=w) return false;
-        return true;
-    });
-
-    // GROUPING LOGIC (CRITICAL)
-    let grouped={};
-
-    clean.forEach(d=>{
-        let banner=d.Template||"Unknown";
-        let email=d.Receiver||"Unknown";
-        let key=email+"|"+banner;
-
-        let date=new Date(d["Time Clicked"]);
-        let day=date.toISOString().split("T")[0];
-
-        if(!grouped[key]){
-            grouped[key]={
-                email,
-                sender:d.Sender,
-                banner,
-                firstClick:date,
-                days:new Set([day])
-            };
-        } else {
-            if(date < grouped[key].firstClick){
-                grouped[key].firstClick=date;
+    // ---------- LOAD FILE ----------
+    fileInput.addEventListener("change", e => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (evt) => {
+            try {
+                const wb = XLSX.read(evt.target.result, { type: 'array' });
+                rawData = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
+                alert("File loaded ✅ (" + rawData.length + " rows)");
+            } catch (err) {
+                console.error(err);
+                alert("Could not read file: " + err.message);
             }
-            grouped[key].days.add(day);
+        };
+        reader.onerror = () => alert("Error reading file.");
+        reader.readAsArrayBuffer(file);
+    });
+
+    // ---------- DEPLOY ----------
+    deployBtn.addEventListener("click", () => {
+        if (!rawData || rawData.length === 0) {
+            alert("Upload a file first");
+            return;
         }
+        setupFilters();
+        processData();
     });
 
-    let final=Object.values(grouped).map(x=>({
-        email:x.email,
-        sender:x.sender,
-        banner:x.banner,
-        firstClick:x.firstClick,
-        daysClicked:x.days.size
-    }));
+    // ---------- FILTER SETUP ----------
+    function setupFilters() {
+        monthFilter.innerHTML = "<option value='all'>All Months</option>";
+        weekFilter.innerHTML  = "<option value='all'>All Weeks</option>";
+        const months = new Set(), weeks = new Set();
+        rawData.forEach(d => {
+            const dt = parseDate(d["Time Clicked"]);
+            if (dt) {
+                months.add(dt.getMonth());
+                weeks.add(getWeek(dt));
+            }
+        });
+        [...months].sort((a,b)=>a-b).forEach(m => {
+            const o = document.createElement("option");
+            o.value = m;
+            o.text  = "Month " + (m + 1);
+            monthFilter.add(o);
+        });
+        [...weeks].sort((a,b)=>a-b).forEach(w => {
+            const o = document.createElement("option");
+            o.value = w;
+            o.text  = "Week " + w;
+            weekFilter.add(o);
+        });
+    }
 
-    total.innerText=rawData.length;
-    leads.innerText=final.length;
-    recipients.innerText=new Set(final.map(x=>x.email)).size;
-    senders.innerText=new Set(final.map(x=>x.sender)).size;
+    // ---------- PROCESS DATA ----------
+    function processData() {
+        const m = monthFilter.value;
+        const w = weekFilter.value;
 
-    let clusters={CP:[],BE:[],IT:[],OT:[]};
+        let clean = rawData.filter(d =>
+            !["Logo", "Facebook", "LinkedIn", "Youtube"].includes(d.Tracker)
+        );
 
-    final.forEach(d=>{
-        let t=d.banner.toLowerCase();
-        if(t.includes("copilot")||t.includes("partner")) clusters.CP.push(d);
-        else if(t.includes("be")) clusters.BE.push(d);
-        else if(t.includes("it")) clusters.IT.push(d);
-        else if(t.includes("ot")) clusters.OT.push(d);
-    });
-
-    render("cpTable",clusters.CP);
-    render("beTable",clusters.BE);
-    render("itTable",clusters.IT);
-    render("otTable",clusters.OT);
-}
-
-// GROUPED RENDER
-function render(id,data){
-
-    let banners={};
-
-    data.forEach(d=>{
-        if(!banners[d.banner]) banners[d.banner]=[];
-        banners[d.banner].push(d);
-    });
-
-    let html="";
-
-    Object.keys(banners).forEach(banner=>{
-
-        html+=`<div class="banner-block">
-        <h3>${sanitize(banner)}</h3>
-        <table>
-        <tr>
-            <th>Email</th>
-            <th>Sender</th>
-            <th>First Click</th>
-            <th>Days</th>
-        </tr>`;
-
-        banners[banner].forEach(r=>{
-            html+=`
-            <tr>
-                <td>${sanitize(r.email)}</td>
-                <td>${sanitize(r.sender)}</td>
-                <td>${r.firstClick.toLocaleString()}</td>
-                <td>${r.daysClicked}</td>
-            </tr>`;
+        // FILTER by month/week
+        clean = clean.filter(d => {
+            const dt = parseDate(d["Time Clicked"]);
+            if (!dt) return false;
+            if (m !== "all" && dt.getMonth() != m) return false;
+            if (w !== "all" && getWeek(dt) != w) return false;
+            return true;
         });
 
-        html+="</table></div>";
-    });
+        // GROUPING (email + banner)
+        const grouped = {};
+        clean.forEach(d => {
+            const banner = d.Template || "Unknown";
+            const email  = d.Receiver || "Unknown";
+            const key    = email + "|" + banner;
+            const date   = parseDate(d["Time Clicked"]);
+            if (!date) return;
+            const day = date.toISOString().split("T")[0];
 
-    document.getElementById(id).innerHTML=html;
-}
+            if (!grouped[key]) {
+                grouped[key] = {
+                    email,
+                    sender: d.Sender,
+                    banner,
+                    firstClick: date,
+                    days: new Set([day])
+                };
+            } else {
+                if (date < grouped[key].firstClick) grouped[key].firstClick = date;
+                grouped[key].days.add(day);
+            }
+        });
 
-// CLEAN BAD CHARACTERS
-function sanitize(text){
-    return (text||"").replace(/[^\x20-\x7E]/g,"");
-}
+        const final = Object.values(grouped).map(x => ({
+            email: x.email,
+            sender: x.sender,
+            banner: x.banner,
+            firstClick: x.firstClick,
+            daysClicked: x.days.size
+        }));
 
-monthFilter.onchange=processData;
-weekFilter.onchange=processData;
+        // KPI cards
+        totalEl.innerText      = rawData.length;
+        leadsEl.innerText      = final.length;
+        recipientsEl.innerText = new Set(final.map(x => x.email)).size;
+        sendersEl.innerText    = new Set(final.map(x => x.sender)).size;
 
+        // CLUSTER ASSIGNMENT (word-boundary safe)
+        const clusters = { CP: [], BE: [], IT: [], OT: [] };
+        final.forEach(d => {
+            const t = (d.banner || "").toLowerCase();
+            if (/\b(copilot|partner|cp)\b/.test(t))    clusters.CP.push(d);
+            else if (/\bbe\b/.test(t))                  clusters.BE.push(d);
+            else if (/\bit\b/.test(t))                  clusters.IT.push(d);
+            else if (/\bot\b/.test(t))                  clusters.OT.push(d);
+            else                                        clusters.CP.push(d); // default bucket
+        });
+
+        render("cpTable", clusters.CP);
+        render("beTable", clusters.BE);
+        render("itTable", clusters.IT);
+        render("otTable", clusters.OT);
+    }
+
+    // ---------- GROUPED RENDER ----------
+    function render(id, data) {
+        const container = document.getElementById(id);
+        if (!data.length) {
+            container.innerHTML = "<div class='banner-block'><em>No data for this cluster.</em></div>";
+            return;
+        }
+        const banners = {};
+        data.forEach(d => {
+            if (!banners[d.banner]) banners[d.banner] = [];
+            banners[d.banner].push(d);
+        });
+        let html = "";
+        Object.keys(banners).forEach(banner => {
+            html += `<div class="banner-block">
+                <h3>${sanitize(banner)}</h3>
+                <table>
+                    <tr>
+                        <th>Email</th>
+                        <th>Sender</th>
+                        <th>First Click</th>
+                        <th>Days</th>
+                    </tr>`;
+            banners[banner].forEach(r => {
+                html += `
+                    <tr>
+                        <td>${sanitize(r.email)}</td>
+                        <td>${sanitize(r.sender)}</td>
+                        <td>${r.firstClick ? r.firstClick.toLocaleString() : "—"}</td>
+                        <td>${r.daysClicked}</td>
+                    </tr>`;
+            });
+            html += "</table></div>";
+        });
+        container.innerHTML = html;
+    }
+
+    // ---------- FILTER CHANGE HANDLERS ----------
+    monthFilter.addEventListener("change", processData);
+    weekFilter.addEventListener("change",  processData);
+
+});
 </script>
-
 </body>
 </html>
