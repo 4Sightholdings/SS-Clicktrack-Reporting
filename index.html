@@ -8,18 +8,13 @@
   :root{
     --navy:#0b1e3f;--blue:#0078d4;--red:#c8102e;
     --grey:#f4f6f9;--border:#e3e6ea;--text:#1f2937;
-    --be:#0078d4;  /* Blue */
-    --cp:#c8102e;  /* Red */
-    --it:#d97706;  /* Amber */
-    --ot:#16a34a;  /* Green */
-    --ss:#0b1e3f;  /* Navy */
+    --be:#0078d4;--cp:#c8102e;--it:#d97706;--ot:#16a34a;--ss:#0b1e3f;
   }
   *{box-sizing:border-box;}
   body{font-family:"Segoe UI",Arial,sans-serif;background:var(--grey);margin:0;padding:24px;color:var(--text);}
 
   .header{background:var(--navy);color:#fff;border-radius:10px;padding:18px 24px;
-    display:flex;align-items:center;gap:20px;box-shadow:0 2px 6px rgba(0,0,0,.08);
-    transition:background .3s;}
+    display:flex;align-items:center;gap:20px;box-shadow:0 2px 6px rgba(0,0,0,.08);transition:background .3s;}
   .header h1{font-size:22px;margin:0;font-weight:700;}
   .header .sub{font-size:13px;opacity:.85;}
   .header .period{margin-left:auto;font-size:14px;opacity:.9;}
@@ -29,7 +24,6 @@
   .btn-red{background:var(--red);color:#fff;} .btn-blue{background:var(--blue);color:#fff;}
   .btn-ghost{background:#fff;color:var(--navy);border:1px solid var(--border);}
 
-  /* ===== CLUSTER PILLS ===== */
   .cluster-bar{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
   .cluster-bar .label{font-size:12px;color:#6b7280;text-transform:uppercase;letter-spacing:.5px;font-weight:600;margin-right:4px;}
   .pill{padding:8px 16px;border-radius:999px;font-size:13px;font-weight:700;cursor:pointer;
@@ -37,21 +31,15 @@
     display:inline-flex;align-items:center;gap:6px;}
   .pill:hover{transform:translateY(-1px);box-shadow:0 2px 6px rgba(0,0,0,.08);}
   .pill .dot{width:8px;height:8px;border-radius:50%;display:inline-block;}
-  .pill.all .dot{background:#6b7280;}
-  .pill.be  .dot{background:var(--be);}
-  .pill.cp  .dot{background:var(--cp);}
-  .pill.it  .dot{background:var(--it);}
-  .pill.ot  .dot{background:var(--ot);}
-  .pill.ss  .dot{background:var(--ss);}
-  .pill.un  .dot{background:#9ca3af;}
+  .pill.all .dot{background:#6b7280;}.pill.be .dot{background:var(--be);}
+  .pill.cp .dot{background:var(--cp);}.pill.it .dot{background:var(--it);}
+  .pill.ot .dot{background:var(--ot);}.pill.ss .dot{background:var(--ss);}
+  .pill.un .dot{background:#9ca3af;}
   .pill.active{color:#fff;border-color:transparent;}
-  .pill.all.active{background:#6b7280;}
-  .pill.be.active {background:var(--be);}
-  .pill.cp.active {background:var(--cp);}
-  .pill.it.active {background:var(--it);}
-  .pill.ot.active {background:var(--ot);}
-  .pill.ss.active {background:var(--ss);}
-  .pill.un.active {background:#9ca3af;}
+  .pill.all.active{background:#6b7280;}.pill.be.active{background:var(--be);}
+  .pill.cp.active{background:var(--cp);}.pill.it.active{background:var(--it);}
+  .pill.ot.active{background:var(--ot);}.pill.ss.active{background:var(--ss);}
+  .pill.un.active{background:#9ca3af;}
   .pill .count{background:rgba(0,0,0,.15);padding:1px 8px;border-radius:999px;font-size:11px;}
   .pill.active .count{background:rgba(255,255,255,.25);}
 
@@ -61,10 +49,9 @@
   .card h4{margin:0 0 8px;font-size:12px;letter-spacing:.5px;text-transform:uppercase;color:#6b7280;}
   .card .value{font-size:28px;font-weight:800;color:var(--navy);}
   .card .sub{font-size:12px;color:#6b7280;margin-top:4px;}
-  .card.green{border-top-color:#16a34a;} .card.amber{border-top-color:#d97706;}
-  .card.red{border-top-color:var(--red);} .card.purple{border-top-color:#7c3aed;}
+  .card.green{border-top-color:#16a34a;}.card.amber{border-top-color:#d97706;}
+  .card.red{border-top-color:var(--red);}.card.purple{border-top-color:#7c3aed;}
   .card.navy{border-top-color:var(--navy);}
-  /* When a cluster is active, accent the top KPI card too */
   body.cluster-be .card:first-child{border-top-color:var(--be);}
   body.cluster-cp .card:first-child{border-top-color:var(--cp);}
   body.cluster-it .card:first-child{border-top-color:var(--it);}
@@ -73,8 +60,8 @@
 
   .status{margin-top:18px;padding:12px 16px;background:#eaf3ff;border-radius:8px;
     font-size:13px;color:#1f3a5f;}
+  .status.error{background:#fee2e2;color:#7f1d1d;}
 
-  /* ===== BANNER BREAKDOWN ===== */
   .breakdown{margin-top:24px;}
   .breakdown h2{font-size:18px;color:var(--navy);margin:0 0 12px;display:flex;align-items:center;gap:8px;}
   .breakdown .controls{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
@@ -93,16 +80,15 @@
   .banner-group.open .banner-btn .arrow{transform:rotate(90deg);}
   .cluster-tag{display:inline-block;padding:3px 9px;border-radius:6px;font-size:10px;
     font-weight:800;color:#fff;letter-spacing:.5px;flex-shrink:0;}
-  .cluster-tag.be{background:var(--be);} .cluster-tag.cp{background:var(--cp);}
-  .cluster-tag.it{background:var(--it);} .cluster-tag.ot{background:var(--ot);}
-  .cluster-tag.ss{background:var(--ss);} .cluster-tag.un{background:#9ca3af;}
+  .cluster-tag.be{background:var(--be);}.cluster-tag.cp{background:var(--cp);}
+  .cluster-tag.it{background:var(--it);}.cluster-tag.ot{background:var(--ot);}
+  .cluster-tag.ss{background:var(--ss);}.cluster-tag.un{background:#9ca3af;}
   .banner-btn .count{background:var(--blue);color:#fff;padding:4px 10px;border-radius:999px;
     font-size:12px;font-weight:700;flex-shrink:0;}
   .banner-body{display:none;border-top:1px solid var(--border);background:#fafbfc;}
   .banner-group.open .banner-body{display:block;}
   table.people{width:100%;border-collapse:collapse;font-size:13px;}
-  table.people th{background:#eef2f7;text-align:left;padding:10px 14px;
-    font-weight:600;color:var(--navy);}
+  table.people th{background:#eef2f7;text-align:left;padding:10px 14px;font-weight:600;color:var(--navy);}
   table.people td{padding:10px 14px;border-top:1px solid var(--border);vertical-align:top;}
   table.people tr:hover td{background:#fff;}
   table.people .num{text-align:right;font-variant-numeric:tabular-nums;}
@@ -114,7 +100,6 @@
   .footer{text-align:center;margin-top:28px;font-size:12px;color:#6b7280;}
   .footer b{color:var(--blue);}
 
-  /* DRAWER */
   .backdrop{position:fixed;inset:0;background:rgba(0,0,0,.4);opacity:0;visibility:hidden;
     transition:opacity .25s ease;z-index:998;}
   .backdrop.open{opacity:1;visibility:visible;}
@@ -131,6 +116,9 @@
   .drawer input[type="password"]{width:100%;padding:10px;border:1px solid var(--border);
     border-radius:6px;font-family:inherit;font-size:14px;}
   .drawer .row{display:flex;gap:8px;margin-top:10px;align-items:center;flex-wrap:wrap;}
+  .help-box{background:#fef3c7;border:1px solid #fcd34d;color:#78350f;padding:10px 12px;
+    border-radius:6px;font-size:12px;margin-top:10px;line-height:1.5;}
+  .help-box a{color:#7c2d12;font-weight:600;}
   #pastList{margin-top:16px;}
   #pastList .item{padding:12px;border:1px solid var(--border);border-radius:8px;margin-bottom:8px;
     display:flex;justify-content:space-between;align-items:center;gap:10px;}
@@ -152,7 +140,6 @@
 </head>
 <body>
 
-<!-- HEADER -->
 <div class="header" id="header">
   <div>
     <h1>Rocketseed Banner Click Report — 4Sight Holdings</h1>
@@ -166,7 +153,6 @@
   </div>
 </div>
 
-<!-- CLUSTER PILLS -->
 <div class="cluster-bar" id="clusterBar">
   <span class="label">Cluster:</span>
   <button class="pill all active" data-cluster="ALL">● All <span class="count" id="cnt-ALL">0</span></button>
@@ -178,7 +164,6 @@
   <button class="pill un"  data-cluster="UN"><span class="dot"></span>Unclassified <span class="count" id="cnt-UN">0</span></button>
 </div>
 
-<!-- KPIs -->
 <div class="kpis">
   <div class="card"><h4>Total Clicks</h4>
     <div class="value" id="totalClicks">XXX</div><div class="sub">All recorded clicks</div></div>
@@ -216,12 +201,15 @@
   Data source: Rocketseed Click Track Export
 </div>
 
-<!-- DRAWER -->
 <div class="backdrop" id="backdrop"></div>
 <aside class="drawer" id="drawer">
   <header><h3>📁 Past Reports</h3><button class="close" id="closeDrawer">✕</button></header>
   <div class="body">
-    <small>Stored in your private GitHub Gist. Paste a Personal Access Token (classic) with the <b>gist</b> scope. The token is saved only in your browser.</small>
+    <small>Stored in your private GitHub Gist. Paste a <b>Classic</b> Personal Access Token with the <b>gist</b> scope. The token is saved only in your browser.</small>
+    <div class="help-box">
+      ⚠️ <b>Important:</b> Fine-grained tokens <b>do NOT</b> support the Gists API. You must create a <b>Classic</b> token at
+      <a href="https://github.com/settings/tokens" target="_blank">github.com/settings/tokens</a> → <b>Tokens (classic)</b> → tick the <b>gist</b> scope.
+    </div>
     <input type="password" id="ghToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxx" style="margin-top:10px;">
     <div class="row">
       <button class="btn btn-blue" id="saveTokenBtn">Save</button>
@@ -248,57 +236,34 @@ const xlsxReady = new Promise((resolve, reject) => {
   document.head.appendChild(s);
 });
 
-function $(id){ return document.getElementById(id); }
-function setText(id, value){ const el=$(id); if(el) el.textContent=value;
-  else console.warn('[setText] missing element:',id); }
-function setStatus(msg){ setText('status',msg); }
+function $(id){return document.getElementById(id);}
+function setText(id,value){const el=$(id);if(el)el.textContent=value;
+  else console.warn('[setText] missing:',id);}
+function setStatus(msg, isError){
+  const el = $('status');
+  if(el){ el.textContent=msg; el.classList.toggle('error', !!isError); }
+}
 
-/* ============================================================ */
-/* =============== CLUSTER MAPPING (locked in) ================ */
-/* ============================================================ */
+/* ===== Cluster mapping ===== */
 const CLUSTER_MAP = {
-  SS: [
-    '4citizen 360',
-    'African Mining Indaba_Download Brochure_9-12Feb2026',
+  SS:['4citizen 360','African Mining Indaba_Download Brochure_9-12Feb2026',
     'Breaking Business Boundaries Event_Register Now_2Oct2025',
-    'Holidays and support December 2025',
-    'Namibia Mining Expo 2025',
-    'Seven Stages of AI with People in Business'
-  ],
-  OT: [
-    '4Sight OT_Simio Webinar_25Sept2025',
-    '7 Stages of AI for Engineers in Industry',
-    'Download E-Broshure - Mining, Metal and Minerals',
-    'NPS - Banner (Inetrnal Sales)',
-    'OT Automation Holidays and Support 2025',
-    'OT Optimisation Holidays and Support 2025',
-    'OT Simulation Holidays and Support 2025',
-    'OT_NextGenOpX Event_13Aug2025'
-  ],
-  IT: [
-    'Acumatica Summit Africa_12-13Mar2026',
-    'Acumatica Webinar for Construction',
-    'Enterprise Fixed Asset Management',
-    'Enterprise Fixed Asset Management v 01',
-    'Generic F&O',
-    'Intelligent Automation with Dynamics CE',
-    'IT Cluster ERP Automated Intelligence',
-    'IT_SEI X3 Event_Jul2025',
-    'SEI Webinars 23Apr or 7May 2026'
-  ],
-  CP: [
-    '4Sight Marketplace March 2025',
-    'Channel Partner Summit 2026',
-    'Channel Partner Summit 2026 - Registration',
-    'Copilot Blitz for Resellers in Kenya_Feb2026',
-    'Copilot Free Chat',
-    'Join Cloud Champion - Where SMB Resellers Succeed',
-    'MaaS Banner1',
-    'MaaS Banner2'
-  ],
-  BE: [
-    '4Sight BE_Generic DIG_Apr2026',
-    '4Sight BE_Generic MDE_Apr2026',
+    'Holidays and support December 2025','Namibia Mining Expo 2025',
+    'Seven Stages of AI with People in Business'],
+  OT:['4Sight OT_Simio Webinar_25Sept2025','7 Stages of AI for Engineers in Industry',
+    'Download E-Broshure - Mining, Metal and Minerals','NPS - Banner (Inetrnal Sales)',
+    'OT Automation Holidays and Support 2025','OT Optimisation Holidays and Support 2025',
+    'OT Simulation Holidays and Support 2025','OT_NextGenOpX Event_13Aug2025'],
+  IT:['Acumatica Summit Africa_12-13Mar2026','Acumatica Webinar for Construction',
+    'Enterprise Fixed Asset Management','Enterprise Fixed Asset Management v 01',
+    'Generic F&O','Intelligent Automation with Dynamics CE',
+    'IT Cluster ERP Automated Intelligence','IT_SEI X3 Event_Jul2025',
+    'SEI Webinars 23Apr or 7May 2026'],
+  CP:['4Sight Marketplace March 2025','Channel Partner Summit 2026',
+    'Channel Partner Summit 2026 - Registration','Copilot Blitz for Resellers in Kenya_Feb2026',
+    'Copilot Free Chat','Join Cloud Champion - Where SMB Resellers Succeed',
+    'MaaS Banner1','MaaS Banner2'],
+  BE:['4Sight BE_Generic DIG_Apr2026','4Sight BE_Generic MDE_Apr2026',
     '4Sight_4adopt IQ_MDE Rocket seed banner_Feb2026',
     'BE DEV | Software-and-application-development',
     'BE_Dev_Bring your app ideas to life_Jul2025',
@@ -308,46 +273,31 @@ const CLUSTER_MAP = {
     'BE_ESG_Is your organisation ESG ready_Jul2025',
     'BE_ESG_Make ESG readiness your competitive edge_Jul2025',
     'BE_MDE_Microsoft 365 + Copilot Business_Feb2026',
-    'Dev as a Service',
-    'Dev as a Service - agri',
-    'Dev as a Service - industrial',
-    'Dev as a Service - medical',
-    'Dev as a Service - office workers',
-    'Generic ACM_Apr2026',
-    'Generic Data_Apr2026',
-    'Generic Dev_Apr2026'
-  ]
+    'Dev as a Service','Dev as a Service - agri','Dev as a Service - industrial',
+    'Dev as a Service - medical','Dev as a Service - office workers',
+    'Generic ACM_Apr2026','Generic Data_Apr2026','Generic Dev_Apr2026']
 };
-// Build a fast lookup by lowercased exact name
 const EXACT_CLUSTER = {};
-Object.entries(CLUSTER_MAP).forEach(([c, names]) => {
+Object.entries(CLUSTER_MAP).forEach(([c,names]) => {
   names.forEach(n => EXACT_CLUSTER[n.toLowerCase().trim()] = c);
 });
-
-// Keyword fallback for any new banners
 function classifyBanner(name){
   const k = (name||'').toLowerCase().trim();
   if(EXACT_CLUSTER[k]) return EXACT_CLUSTER[k];
   if(/\b(be[_ ]|esg|mde|dev as a service|generic (acm|data|dev)|4adopt)/.test(k)) return 'BE';
   if(/\b(cp[_ ]|channel partner|cloud champion|maas|marketplace|copilot blitz|copilot free chat|resellers)/.test(k)) return 'CP';
   if(/\b(it[_ ]|acumatica|sei|dynamics|erp|f&o|fixed asset)/.test(k)) return 'IT';
-  if(/\b(ot[_ ]|simio|mining|metal|minerals|nextgen|engineers in industry|simulation|optimisation|automation)/.test(k)) return 'OT';
+  if(/\b(ot[_ ]|simio|mining|metal|minerals|nextgen|engineers in industry|simulation|optimisation|automation|nps)/.test(k)) return 'OT';
   if(/\b(holidays and support|namibia|indaba|breaking business boundaries|4citizen|seven stages of ai with people)/.test(k)) return 'SS';
   return 'UN';
 }
+const CLUSTER_NAMES = {ALL:'All Clusters',BE:'Business Environment',CP:'Channel Partner',
+  IT:'Information Technologies',OT:'Operational Technologies',SS:'Shared Services',UN:'Unclassified'};
 
-const CLUSTER_NAMES = {
-  ALL:'All Clusters', BE:'Business Environment', CP:'Channel Partner',
-  IT:'Information Technologies', OT:'Operational Technologies',
-  SS:'Shared Services', UN:'Unclassified'
-};
-
-/* ============================================================ */
-/* ====================== UPLOAD =============================== */
-/* ============================================================ */
 let currentReport = null;
 let activeCluster = 'ALL';
 
+/* ===== Upload ===== */
 const fileInput = $('fileInput');
 $('uploadBtn').addEventListener('click', () => fileInput.click());
 fileInput.addEventListener('change', handleFile);
@@ -357,7 +307,7 @@ function handleFile(e){
   if(!file) return;
   setStatus('⏳ Reading file: '+file.name);
   const reader = new FileReader();
-  reader.onerror = () => setStatus('❌ Could not read file.');
+  reader.onerror = () => setStatus('❌ Could not read file.', true);
   reader.onload = async (evt) => {
     try{
       await xlsxReady;
@@ -365,16 +315,27 @@ function handleFile(e){
       const wb = XLSX.read(data,{type:'array',cellDates:true});
       const ws = wb.Sheets[wb.SheetNames[0]];
       const rows = XLSX.utils.sheet_to_json(ws,{defval:''});
-      if(!rows.length){ setStatus('⚠️ The file is empty.'); return; }
+      if(!rows.length){ setStatus('⚠️ The file is empty.', true); return; }
+      console.log('📋 Column headers in your file:', Object.keys(rows[0]));
       processRows(rows, file.name);
       setStatus(`✅ Loaded ${rows.length.toLocaleString()} rows from ${file.name}`);
     } catch(err){ console.error(err);
-      setStatus('❌ Could not parse file: '+err.message); }
+      setStatus('❌ Could not parse file: '+err.message, true); }
   };
   reader.readAsArrayBuffer(file);
 }
 
-function pick(row, aliases){
+/* Lookup helpers */
+function pickStrict(row, aliases){
+  // EXACT (case-insensitive) match only — no partials
+  const keys = Object.keys(row);
+  for(const a of aliases){
+    const f = keys.find(k => k.toLowerCase().trim() === a.toLowerCase());
+    if(f) return row[f];
+  }
+  return '';
+}
+function pickLoose(row, aliases){
   const keys = Object.keys(row);
   for(const a of aliases){
     const f = keys.find(k => k.toLowerCase().trim() === a.toLowerCase());
@@ -386,11 +347,11 @@ function pick(row, aliases){
   }
   return '';
 }
-function isInternal(email){ if(!email) return false;
-  return /@4sight\.|@4sightholdings\./i.test(String(email)); }
-function toDate(v){ if(!v) return null;
+function isInternal(email){if(!email) return false;
+  return /@4sight\.|@4sightholdings\./i.test(String(email));}
+function toDate(v){if(!v) return null;
   if(v instanceof Date && !isNaN(v)) return v;
-  const d=new Date(v); return isNaN(d) ? null : d; }
+  const d=new Date(v); return isNaN(d) ? null : d;}
 function median(arr){const s=[...arr].sort((a,b)=>a-b);const m=Math.floor(s.length/2);
   return s.length%2 ? s[m] : (s[m-1]+s[m])/2;}
 function formatDate(d){if(!d) return '—';
@@ -399,14 +360,17 @@ function formatTime(d){if(!d) return '—';
   return d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});}
 
 function processRows(rows, filename){
-  // store every parsed click row (cluster-tagged) for later filtering
   const clicks = [];
+  let bannerColMissing = 0;
   rows.forEach(r => {
-    const recipient = String(pick(r,['Recipient','Recipient Email','To','Receiver','Email','Recipient Address'])).trim();
-    const sender    = String(pick(r,['Sender','From','Sender Email','User','Sent By'])).trim();
-    const banner    = String(pick(r,['Banner','Banner Name','Campaign','Campaign Name','Subject','Banner Title'])).trim() || '(Unspecified Banner)';
-    const sentRaw   = pick(r,['Sent','Sent Date','Date Sent','Send Date','Email Date']);
-    const clickRaw  = pick(r,['Clicked','Click Date','Date Clicked','Click Time','Date','Timestamp']);
+    const recipient = String(pickLoose(r,['Recipient','Recipient Email','To','Receiver','Email','Recipient Address'])).trim();
+    const sender    = String(pickLoose(r,['Sender','From','Sender Email','User','Sent By'])).trim();
+    // STRICT match for Template / Banner — never falls back to Subject!
+    const bannerRaw = pickStrict(r, ['Template','Banner','Banner Name','Banner Title','Campaign','Campaign Name']);
+    const banner = String(bannerRaw).trim() || '(Unspecified Banner)';
+    if(!bannerRaw) bannerColMissing++;
+    const sentRaw  = pickLoose(r,['Sent','Sent Date','Date Sent','Send Date','Email Date']);
+    const clickRaw = pickLoose(r,['Clicked','Click Date','Date Clicked','Click Time','Date','Timestamp']);
     const cluster = classifyBanner(banner);
     clicks.push({
       recipient, sender, banner, cluster,
@@ -414,28 +378,21 @@ function processRows(rows, filename){
       clickISO: toDate(clickRaw) ? toDate(clickRaw).toISOString() : null
     });
   });
-
+  if(bannerColMissing === rows.length){
+    setStatus('⚠️ Could not find the "Template" column in your file. Check the file format.', true);
+  }
   currentReport = { filename: filename||'Manual entry', clicks, savedAt:new Date().toISOString() };
   recompute();
 }
 
-/* ============================================================ */
-/* ============ RECOMPUTE BASED ON activeCluster =============== */
-/* ============================================================ */
 function recompute(){
-  if(!currentReport){ return; }
+  if(!currentReport) return;
   const all = currentReport.clicks;
-
-  // Per-cluster counts (for pills)
-  const clusterCounts = {ALL:all.length, BE:0, CP:0, IT:0, OT:0, SS:0, UN:0};
+  const clusterCounts = {ALL:all.length,BE:0,CP:0,IT:0,OT:0,SS:0,UN:0};
   all.forEach(c => clusterCounts[c.cluster] = (clusterCounts[c.cluster]||0)+1);
-  ['ALL','BE','CP','IT','OT','SS','UN'].forEach(k =>
-    setText('cnt-'+k, clusterCounts[k].toLocaleString()));
+  ['ALL','BE','CP','IT','OT','SS','UN'].forEach(k => setText('cnt-'+k, clusterCounts[k].toLocaleString()));
 
-  // Filter to active cluster
   const rows = activeCluster==='ALL' ? all : all.filter(c => c.cluster===activeCluster);
-
-  // KPIs
   let internal=0, external=0;
   const extRecipients=new Set(), senders=new Set(), responseMins=[];
   let minDate=null, maxDate=null;
@@ -447,63 +404,53 @@ function recompute(){
     const cd = c.clickISO ? new Date(c.clickISO) : null;
     if(sd && cd){ const diff=(cd-sd)/60000; if(diff>=0 && diff<60*24*30) responseMins.push(diff); }
     const anyD = cd || sd;
-    if(anyD){ if(!minDate||anyD<minDate) minDate=anyD;
-              if(!maxDate||anyD>maxDate) maxDate=anyD; }
+    if(anyD){ if(!minDate||anyD<minDate) minDate=anyD; if(!maxDate||anyD>maxDate) maxDate=anyD; }
   });
   const total = rows.length;
 
-  setText('totalClicks',     total.toLocaleString());
-  setText('externalClicks',  external.toLocaleString());
-  setText('internalClicks',  internal.toLocaleString());
-  setText('externalPct',     total ? Math.round(external/total*100)+'%' : '0%');
-  setText('internalPct',     total ? Math.round(internal/total*100)+'%' : '0%');
-  setText('uniqueRecipients',extRecipients.size.toLocaleString());
-  setText('senders',         senders.size.toLocaleString());
-  setText('medianResponse',  responseMins.length ? median(responseMins).toFixed(1)+' min' : '—');
-  setText('reportPeriod',    minDate && maxDate ? formatDate(minDate)+' → '+formatDate(maxDate) : '— — —');
-  setText('reportDate',      formatDate(new Date()));
+  setText('totalClicks', total.toLocaleString());
+  setText('externalClicks', external.toLocaleString());
+  setText('internalClicks', internal.toLocaleString());
+  setText('externalPct', total ? Math.round(external/total*100)+'%' : '0%');
+  setText('internalPct', total ? Math.round(internal/total*100)+'%' : '0%');
+  setText('uniqueRecipients', extRecipients.size.toLocaleString());
+  setText('senders', senders.size.toLocaleString());
+  setText('medianResponse', responseMins.length ? median(responseMins).toFixed(1)+' min' : '—');
+  setText('reportPeriod', minDate && maxDate ? formatDate(minDate)+' → '+formatDate(maxDate) : '— — —');
+  setText('reportDate', formatDate(new Date()));
 
-  // Build banner groups (with dedup logic)
-  const bannerMap = new Map(); // banner -> Map(recipient|sender -> aggregate)
+  const bannerMap = new Map();
   rows.forEach(c => {
     if(!bannerMap.has(c.banner)) bannerMap.set(c.banner, new Map());
     const peopleMap = bannerMap.get(c.banner);
     const key = (c.recipient||'(unknown)').toLowerCase()+'||'+(c.sender||'(unknown)').toLowerCase();
     if(!peopleMap.has(key)) peopleMap.set(key, {
-      recipient: c.recipient||'(unknown)',
-      sender:    c.sender||'(unknown)',
-      clicks: 0, lastClickISO: null
+      recipient: c.recipient||'(unknown)', sender: c.sender||'(unknown)',
+      clicks:0, lastClickISO:null
     });
     const p = peopleMap.get(key);
     p.clicks++;
-    if(c.clickISO && (!p.lastClickISO || new Date(c.clickISO) > new Date(p.lastClickISO))){
+    if(c.clickISO && (!p.lastClickISO || new Date(c.clickISO) > new Date(p.lastClickISO)))
       p.lastClickISO = c.clickISO;
-    }
   });
-  const bannerGroups = [...bannerMap.entries()].map(([name, peopleMap]) => ({
+  const bannerGroups = [...bannerMap.entries()].map(([name,peopleMap]) => ({
     name, cluster: classifyBanner(name),
     people: [...peopleMap.values()].sort((a,b)=>b.clicks-a.clicks),
     totalClicks: [...peopleMap.values()].reduce((s,p)=>s+p.clicks,0)
   })).sort((a,b)=>b.totalClicks-a.totalClicks);
 
   renderBanners(bannerGroups, $('bannerSearch').value);
-
-  // Update header sub
   setText('headerSub', activeCluster==='ALL' ? 'Marketing Intelligence'
     : 'Marketing Intelligence · '+CLUSTER_NAMES[activeCluster]);
   document.body.className = activeCluster==='ALL' ? '' : 'cluster-'+activeCluster.toLowerCase();
 }
 
-/* ============================================================ */
-/* ================ BANNER LIST RENDERING ===================== */
-/* ============================================================ */
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,
   c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 
 function renderBanners(groups, filter=''){
   const list = $('bannerList');
   const q = (filter||'').trim().toLowerCase();
-
   let filtered = groups;
   if(q){
     filtered = groups.map(g => {
@@ -514,12 +461,7 @@ function renderBanners(groups, filter=''){
       return null;
     }).filter(Boolean);
   }
-
-  if(!filtered.length){
-    list.innerHTML = '<div class="empty">No matching banners in this view.</div>';
-    return;
-  }
-
+  if(!filtered.length){ list.innerHTML = '<div class="empty">No matching banners in this view.</div>'; return; }
   list.innerHTML = filtered.map(g => {
     const rows = g.people.map((p,idx) => {
       const d = p.lastClickISO ? new Date(p.lastClickISO) : null;
@@ -551,7 +493,6 @@ function renderBanners(groups, filter=''){
         </div>
       </div>`;
   }).join('');
-
   list.querySelectorAll('.banner-btn').forEach(btn => {
     btn.addEventListener('click', () => btn.parentElement.classList.toggle('open'));
   });
@@ -563,9 +504,6 @@ $('expandAllBtn').addEventListener('click', () =>
 $('collapseAllBtn').addEventListener('click', () =>
   document.querySelectorAll('.banner-group').forEach(g => g.classList.remove('open')));
 
-/* ============================================================ */
-/* ==================== CLUSTER PILLS ========================= */
-/* ============================================================ */
 document.querySelectorAll('#clusterBar .pill').forEach(p => {
   p.addEventListener('click', () => {
     document.querySelectorAll('#clusterBar .pill').forEach(x => x.classList.remove('active'));
@@ -575,20 +513,16 @@ document.querySelectorAll('#clusterBar .pill').forEach(p => {
   });
 });
 
-/* ============================================================ */
-/* ======================= DRAWER ============================= */
-/* ============================================================ */
+/* ===== Drawer ===== */
 const drawer=$('drawer'), backdrop=$('backdrop');
-function openDrawer(){ drawer.classList.add('open'); backdrop.classList.add('open'); }
-function closeDrawer(){ drawer.classList.remove('open'); backdrop.classList.remove('open'); }
+function openDrawer(){drawer.classList.add('open');backdrop.classList.add('open');}
+function closeDrawer(){drawer.classList.remove('open');backdrop.classList.remove('open');}
 $('pastBtn').addEventListener('click', openDrawer);
 $('closeDrawer').addEventListener('click', closeDrawer);
 backdrop.addEventListener('click', closeDrawer);
 document.addEventListener('keydown', e => { if(e.key==='Escape') closeDrawer(); });
 
-/* ============================================================ */
-/* ================= GITHUB GIST INTEGRATION ================== */
-/* ============================================================ */
+/* ===== Gist integration ===== */
 const GIST_DESCRIPTION_TAG = 'Rocketseed Report';
 const ghTokenInput = $('ghToken');
 ghTokenInput.value = localStorage.getItem('gh_token') || '';
@@ -605,18 +539,24 @@ $('clearTokenBtn').addEventListener('click', () => {
 $('refreshBtn').addEventListener('click', loadPastReports);
 $('saveReportBtn').addEventListener('click', saveCurrentReport);
 
-function getToken(){ return (ghTokenInput.value||'').trim(); }
-function updateGhStatus(){ setText('ghStatus', getToken() ? '✅ Token saved in this browser.'
-  : 'Not connected — paste your GitHub token above.'); }
+function getToken(){return (ghTokenInput.value||'').trim();}
+function updateGhStatus(){setText('ghStatus', getToken() ? '✅ Token saved in this browser.'
+  : 'Not connected — paste your GitHub token above.');}
 
 async function ghFetch(url, options={}){
   const token = getToken();
   if(!token) throw new Error('No GitHub token');
   const res = await fetch(url,{...options,
-    headers:{ Authorization:'token '+token, Accept:'application/vnd.github+json',
-      ...(options.headers||{}) }});
-  if(!res.ok){ const txt=await res.text().catch(()=>'');
-    throw new Error('GitHub API '+res.status+' '+txt.slice(0,140)); }
+    headers:{Authorization:'token '+token, Accept:'application/vnd.github+json',
+      ...(options.headers||{})}});
+  if(!res.ok){
+    let detail='';
+    try{ detail = (await res.json()).message || ''; } catch(_) {}
+    if(res.status === 403 || res.status === 404){
+      throw new Error(`${res.status} — Your token can't access Gists. Make sure it's a CLASSIC token with the "gist" scope ticked (fine-grained tokens don't work for Gists).`);
+    }
+    throw new Error('GitHub API '+res.status+(detail ? ' — '+detail : ''));
+  }
   if(res.status===204) return null;
   return res.json();
 }
@@ -662,11 +602,7 @@ async function openReport(id){
     let content = file.content;
     if(file.truncated && file.raw_url) content = await (await fetch(file.raw_url)).text();
     const data = JSON.parse(content);
-    // Backward compatibility: rebuild clicks if missing
-    if(!data.clicks){
-      data.clicks = []; // can't reconstruct from old saved KPIs only
-    }
-    // Re-tag clusters in case of mapping updates
+    if(!data.clicks) data.clicks = [];
     data.clicks.forEach(c => c.cluster = classifyBanner(c.banner));
     currentReport = data;
     activeCluster='ALL';
@@ -674,7 +610,7 @@ async function openReport(id){
     recompute();
     setStatus('✅ Loaded report: '+(data.filename||'(saved report)'));
     closeDrawer();
-  } catch(err){ setStatus('❌ Could not open report: '+err.message); }
+  } catch(err){ setStatus('❌ Could not open report: '+err.message, true); }
 }
 
 async function deleteReport(id){
@@ -699,7 +635,7 @@ async function saveCurrentReport(){
     await ghFetch('https://api.github.com/gists',{method:'POST',body:JSON.stringify(body)});
     setStatus('✅ Saved to Gist: '+label);
     loadPastReports();
-  } catch(err){ setStatus('❌ Could not save: '+err.message); }
+  } catch(err){ setStatus('❌ Could not save: '+err.message, true); }
 }
 
 if(getToken()) loadPastReports();
