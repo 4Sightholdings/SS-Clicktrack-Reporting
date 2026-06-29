@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Rocketseed Banner Click Report — 4Sight Holdings</title>
+<title>Click Track Reporting — 4Sight Holdings</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
   :root{
@@ -14,29 +14,38 @@
   body{font-family:"Segoe UI",Arial,sans-serif;background:var(--grey);margin:0;padding:24px;color:var(--text);}
 
   /* ===== HEADER ===== */
-  .header{background:var(--navy);color:#fff;border-radius:10px;padding:18px 24px;
-    display:flex;align-items:center;gap:20px;box-shadow:0 2px 6px rgba(0,0,0,.08);transition:background .3s;}
-  .header h1{font-size:22px;margin:0;font-weight:700;}
-  .header .sub{font-size:13px;opacity:.85;}
-  .header .period{margin-left:auto;font-size:14px;opacity:.9;}
-  .header .actions{display:flex;gap:10px;margin-left:16px;}
-  .btn{padding:10px 16px;border:none;border-radius:8px;font-family:inherit;font-size:14px;
-    font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px;}
+  .header{
+    background:linear-gradient(135deg,#0b1e3f 0%,#102a55 100%);
+    color:#fff;border-radius:14px;padding:22px 28px;
+    display:flex;align-items:center;gap:24px;
+    box-shadow:0 4px 14px rgba(0,0,0,.12);transition:background .3s;
+  }
+  .header h1{font-size:26px;margin:0;font-weight:700;letter-spacing:-.3px;}
+  .header .sub{font-size:13px;opacity:.78;margin-top:2px;}
+  .header .meta{margin-left:auto;display:flex;align-items:center;gap:14px;}
+  .header .period-pill{
+    background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);
+    padding:10px 16px;border-radius:10px;font-size:13px;display:inline-flex;align-items:center;gap:8px;
+  }
+  .header .actions{display:flex;gap:10px;}
+  .btn{padding:11px 18px;border:none;border-radius:10px;font-family:inherit;font-size:14px;
+    font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all .15s;}
+  .btn:hover{transform:translateY(-1px);box-shadow:0 4px 10px rgba(0,0,0,.18);}
   .btn-red{background:var(--red);color:#fff;} .btn-blue{background:var(--blue);color:#fff;}
   .btn-ghost{background:#fff;color:var(--navy);border:1px solid var(--border);}
 
   /* ===== HOME / LOGO BUTTON ===== */
   .home-btn{
-    background:transparent;border:none;cursor:pointer;padding:6px 10px;border-radius:8px;
-    display:flex;align-items:center;gap:12px;transition:background .15s, transform .15s;
+    background:transparent;border:none;cursor:pointer;padding:4px 6px;border-radius:10px;
+    display:flex;align-items:center;gap:14px;transition:background .15s, transform .15s;
   }
   .home-btn:hover{background:rgba(255,255,255,.08);transform:translateY(-1px);}
   .home-btn:active{transform:translateY(0);}
-  .home-btn img{height:42px;display:block;}
-  .home-btn .divider{width:1px;height:32px;background:rgba(255,255,255,.25);}
+  .home-btn svg{height:54px;width:auto;display:block;}
+  .home-btn .divider{width:1px;height:42px;background:rgba(255,255,255,.22);}
 
   /* ===== CLUSTER PILLS ===== */
-  .cluster-bar{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+  .cluster-bar{margin-top:20px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
   .cluster-bar .label{font-size:12px;color:#6b7280;text-transform:uppercase;letter-spacing:.5px;font-weight:600;margin-right:4px;}
   .pill{padding:8px 16px;border-radius:999px;font-size:13px;font-weight:700;cursor:pointer;
     background:#fff;border:2px solid var(--border);color:var(--navy);transition:all .15s;
@@ -56,7 +65,7 @@
   .pill.active .count{background:rgba(255,255,255,.25);}
 
   /* ===== KPI CARDS ===== */
-  .kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-top:16px;}
+  .kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-top:18px;}
   .card{background:#fff;border-radius:10px;padding:18px;box-shadow:0 1px 3px rgba(0,0,0,.06);
     border-top:4px solid var(--blue);transition:border-color .3s;}
   .card h4{margin:0 0 8px;font-size:12px;letter-spacing:.5px;text-transform:uppercase;color:#6b7280;}
@@ -149,8 +158,11 @@
 
   #fileInput{display:none;}
   @media (max-width:1100px){.kpis{grid-template-columns:repeat(3,1fr);}}
-  @media (max-width:640px){.kpis{grid-template-columns:repeat(2,1fr);}
-    .header{flex-wrap:wrap;}.header .period,.header .actions{margin-left:0;width:100%;}}
+  @media (max-width:760px){
+    .header{flex-wrap:wrap;}
+    .header .meta{margin-left:0;width:100%;justify-content:space-between;}
+  }
+  @media (max-width:640px){.kpis{grid-template-columns:repeat(2,1fr);}}
 </style>
 </head>
 <body>
@@ -158,19 +170,59 @@
 <!-- ===== HEADER ===== -->
 <div class="header" id="header">
   <button class="home-btn" id="homeBtn" title="Home — start a new report" aria-label="Home">
-    /4Sight-Logo-White.png" alt="4Sight" onerror="this.style.display='none'">
+    <!-- 4Sight Logo (inline SVG) -->
+    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-label="4Sight">
+      <g fill="none" stroke="#ffffff" stroke-width="9" stroke-linecap="round">
+        <!-- crosshair circle (broken into 4 arcs) -->
+        <path d="M 100 12 A 88 88 0 0 1 188 100"/>
+        <path d="M 188 100 A 88 88 0 0 1 100 188"/>
+        <path d="M 100 188 A 88 88 0 0 1 12 100"/>
+        <path d="M 12 100 A 88 88 0 0 1 100 12"/>
+        <!-- crosshair ticks -->
+        <line x1="100" y1="2"  x2="100" y2="22"/>
+        <line x1="100" y1="178" x2="100" y2="198"/>
+        <line x1="2"   y1="100" x2="22"  y2="100"/>
+        <line x1="178" y1="100" x2="198" y2="100"/>
+      </g>
+      <!-- 4sight wordmark -->
+      <text x="100" y="118" text-anchor="middle"
+            font-family="Segoe UI, Arial, sans-serif" font-weight="700"
+            font-size="48" fill="#ffffff" letter-spacing="-1">4sight</text>
+      <text x="158" y="80" font-family="Segoe UI, Arial, sans-serif"
+            font-size="14" fill="#ffffff">TM</text>
+    </svg>
     <span class="divider"></span>
-    ploads/2023/04/4AI-Logo-White.png" alt="4AI" onerror="this.style.display='none'">
+    <!-- 4AI Logo (inline SVG) -->
+    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-label="4AI">
+      <g fill="none" stroke="#ffffff" stroke-width="9" stroke-linecap="round">
+        <path d="M 100 12 A 88 88 0 0 1 188 100"/>
+        <path d="M 188 100 A 88 88 0 0 1 100 188"/>
+        <path d="M 100 188 A 88 88 0 0 1 12 100"/>
+        <path d="M 12 100 A 88 88 0 0 1 100 12"/>
+        <line x1="100" y1="2"   x2="100" y2="22"/>
+        <line x1="100" y1="178" x2="100" y2="198"/>
+        <line x1="2"   y1="100" x2="22"  y2="100"/>
+        <line x1="178" y1="100" x2="198" y2="100"/>
+      </g>
+      <text x="60"  y="125" font-family="Segoe UI, Arial, sans-serif"
+            font-weight="700" font-size="60" fill="#ffffff">4</text>
+      <text x="100" y="125" font-family="Segoe UI, Arial, sans-serif"
+            font-weight="700" font-size="48" fill="#c8102e">AI</text>
+    </svg>
   </button>
+
   <div>
-    <h1>Rocketseed Banner Click Report — 4Sight Holdings</h1>
-    <div class="sub" id="headerSub">Marketing Intelligence</div>
+    <h1>Click Track Reporting</h1>
+    <div class="sub" id="headerSub">4Sight Holdings · Marketing Intelligence</div>
   </div>
-  <div class="period">📅 <span id="reportPeriod">— — —</span></div>
-  <div class="actions">
-    <button class="btn btn-red"  id="pastBtn">📁 Past Reports</button>
-    <button class="btn btn-blue" id="uploadBtn">⬆️ Upload</button>
-    <input type="file" id="fileInput" accept=".xlsx,.xls,.csv">
+
+  <div class="meta">
+    <div class="period-pill">📅 Reporting Period: <span id="reportPeriod">— — —</span></div>
+    <div class="actions">
+      <button class="btn btn-red"  id="pastBtn">📁 Past Reports</button>
+      <button class="btn btn-blue" id="uploadBtn">⬆️ Upload</button>
+      <input type="file" id="fileInput" accept=".xlsx,.xls,.csv">
+    </div>
   </div>
 </div>
 
@@ -205,7 +257,7 @@
     <div class="value" id="medianResponse">XX min</div><div class="sub">Time-to-click</div></div>
 </div>
 
-<div class="status" id="status">No matching results found</div>
+<div class="status" id="status">Ready — upload a Rocketseed click report to begin.</div>
 
 <!-- ===== BANNER BREAKDOWN ===== -->
 <div class="breakdown">
@@ -463,8 +515,8 @@ function recompute(){
   })).sort((a,b)=>b.totalClicks-a.totalClicks);
 
   renderBanners(bannerGroups, $('bannerSearch').value);
-  setText('headerSub', activeCluster==='ALL' ? 'Marketing Intelligence'
-    : 'Marketing Intelligence · '+CLUSTER_NAMES[activeCluster]);
+  setText('headerSub', activeCluster==='ALL' ? '4Sight Holdings · Marketing Intelligence'
+    : '4Sight Holdings · '+CLUSTER_NAMES[activeCluster]);
   document.body.className = activeCluster==='ALL' ? '' : 'cluster-'+activeCluster.toLowerCase();
 }
 
@@ -551,7 +603,7 @@ $('homeBtn').addEventListener('click', () => {
   setText('reportPeriod', '— — —');
   setText('reportDate', '[ DD MMM YYYY ]');
 
-  setText('headerSub', 'Marketing Intelligence');
+  setText('headerSub', '4Sight Holdings · Marketing Intelligence');
   document.body.className = '';
 
   const search = $('bannerSearch');
@@ -605,7 +657,7 @@ async function ghFetch(url, options={}){
     let detail='';
     try{ detail = (await res.json()).message || ''; } catch(_) {}
     if(res.status === 403 || res.status === 404){
-      throw new Error(`${res.status} — Your token can't access Gists. Make sure it's a CLASSIC token with the "gist" scope ticked (fine-grained tokens don't work for Gists).`);
+      throw new Error(`${res.status} — Your token can't access Gists. Make sure it's a CLASSIC token with the "gist" scope ticked.`);
     }
     throw new Error('GitHub API '+res.status+(detail ? ' — '+detail : ''));
   }
