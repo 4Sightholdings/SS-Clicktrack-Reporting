@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <title>Rocketseed Banner Click Report — 4Sight Holdings</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js
 <style>
   :root{
     --navy:#0b1e3f; --blue:#0078d4; --red:#c8102e;
@@ -153,6 +152,18 @@ https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js
 
 <script>
 /* ====================================================== */
+/* ====== BULLETPROOF XLSX LOADER (no <script> tag) ===== */
+/* ====================================================== */
+const xlsxReady = new Promise((resolve, reject) => {
+  if (window.XLSX) return resolve();
+  const s = document.createElement('script');
+  s.src = 'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';
+  s.onload  = () => resolve();
+  s.onerror = () => reject(new Error('Failed to load XLSX library from CDN'));
+  document.head.appendChild(s);
+});
+
+/* ====================================================== */
 /* ============== NULL-SAFE HELPERS ===================== */
 /* ====================================================== */
 function $(id){ return document.getElementById(id); }
@@ -166,7 +177,7 @@ function setStatus(msg){ setText('status', msg); }
 /* ====================================================== */
 /* ============ CURRENT REPORT STATE ==================== */
 /* ====================================================== */
-let currentReport = null;   // last processed data (for saving)
+let currentReport = null;
 
 /* ====================================================== */
 /* ============== UPLOAD HANDLER ======================== */
@@ -181,8 +192,9 @@ function handleFile(e){
   setStatus('⏳ Reading file: ' + file.name);
   const reader = new FileReader();
   reader.onerror = () => setStatus('❌ Could not read file.');
-  reader.onload = (evt) => {
+  reader.onload = async (evt) => {
     try{
+      await xlsxReady;                                       // wait for XLSX
       const data = new Uint8Array(evt.target.result);
       const wb   = XLSX.read(data, { type:'array', cellDates:true });
       const ws   = wb.Sheets[wb.SheetNames[0]];
@@ -334,6 +346,7 @@ async function ghFetch(url, options={}){
     const txt = await res.text().catch(()=>'');
     throw new Error('GitHub API '+res.status+' '+txt.slice(0,140));
   }
+  if(res.status===204) return null;
   return res.json();
 }
 
@@ -429,7 +442,6 @@ async function saveCurrentReport(){
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,
   c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 
-/* Auto-load list if token present */
 if(getToken()) loadPastReports();
 </script>
 
