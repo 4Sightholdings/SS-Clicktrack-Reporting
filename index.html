@@ -22,7 +22,7 @@
   }
   .header h1{font-size:26px;margin:0;font-weight:700;letter-spacing:-.3px;}
   .header .sub{font-size:13px;opacity:.78;margin-top:2px;}
-  .header .meta{margin-left:auto;display:flex;align-items:center;gap:14px;}
+  .header .meta{margin-left:auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:flex-end;}
   .header .period-pill{
     background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);
     padding:10px 16px;border-radius:10px;font-size:13px;display:inline-flex;align-items:center;gap:8px;
@@ -33,6 +33,31 @@
   .btn:hover{transform:translateY(-1px);box-shadow:0 4px 10px rgba(0,0,0,.18);}
   .btn-red{background:var(--red);color:#fff;} .btn-blue{background:var(--blue);color:#fff;}
   .btn-ghost{background:#fff;color:var(--navy);border:1px solid var(--border);}
+  .btn-settings{background:rgba(255,255,255,.10);color:#fff;border:1px solid rgba(255,255,255,.18);}
+  .btn-settings:hover{background:rgba(255,255,255,.18);}
+
+  /* ===== CONNECTION BADGE ===== */
+  .gh-badge{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:8px 14px;border-radius:999px;font-size:12px;font-weight:700;
+    background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);
+    color:#fff;cursor:pointer;transition:all .15s;letter-spacing:.2px;
+  }
+  .gh-badge:hover{background:rgba(255,255,255,.16);transform:translateY(-1px);}
+  .gh-badge .gh-dot{
+    width:9px;height:9px;border-radius:50%;background:#9ca3af;
+    box-shadow:0 0 0 0 rgba(255,255,255,.4);
+  }
+  .gh-badge.connected .gh-dot{background:#22c55e;animation:pulse 2s infinite;}
+  .gh-badge.checking  .gh-dot{background:#f59e0b;animation:pulse 1s infinite;}
+  .gh-badge.error     .gh-dot{background:#ef4444;}
+  .gh-badge.disconnected .gh-dot{background:#9ca3af;}
+  @keyframes pulse{
+    0%  {box-shadow:0 0 0 0 rgba(34,197,94,.55);}
+    70% {box-shadow:0 0 0 8px rgba(34,197,94,0);}
+    100%{box-shadow:0 0 0 0 rgba(34,197,94,0);}
+  }
+  .gh-badge .gh-user{opacity:.85;font-weight:600;}
 
   /* ===== HOME / LOGO BUTTON ===== */
   .home-btn{
@@ -170,6 +195,18 @@
   .drawer .row{display:flex;gap:8px;margin-top:10px;align-items:center;flex-wrap:wrap;}
   .help-box{background:#fef3c7;border:1px solid #fcd34d;color:#78350f;padding:10px 12px;
     border-radius:6px;font-size:12px;margin-top:10px;line-height:1.5;}
+  .conn-card{
+    margin-top:14px;padding:12px 14px;border:1px solid var(--border);border-radius:10px;
+    background:#f9fafb;display:flex;align-items:center;gap:10px;font-size:13px;
+  }
+  .conn-card .dot{width:10px;height:10px;border-radius:50%;background:#9ca3af;flex-shrink:0;}
+  .conn-card.connected{background:#ecfdf5;border-color:#a7f3d0;color:#065f46;}
+  .conn-card.connected .dot{background:#22c55e;}
+  .conn-card.checking{background:#fffbeb;border-color:#fcd34d;color:#78350f;}
+  .conn-card.checking .dot{background:#f59e0b;}
+  .conn-card.error{background:#fee2e2;border-color:#fca5a5;color:#7f1d1d;}
+  .conn-card.error .dot{background:#ef4444;}
+
   #pastList{margin-top:16px;}
   #pastList .item{padding:12px;border:1px solid var(--border);border-radius:8px;margin-bottom:8px;
     display:flex;justify-content:space-between;align-items:center;gap:10px;}
@@ -182,6 +219,7 @@
   .icon-btn:hover{background:#f3f4f6;}
   .icon-btn.danger:hover{background:#fee2e2;border-color:var(--red);color:var(--red);}
   .icon-btn.primary:hover{background:#dbeafe;border-color:var(--blue);color:var(--blue);}
+  .icon-btn.warn:hover{background:#fef3c7;border-color:#d97706;color:#d97706;}
 
   #fileInput{display:none;}
   @media (max-width:1100px){.kpis{grid-template-columns:repeat(3,1fr);}}
@@ -208,9 +246,15 @@
 
   <div class="meta">
     <div class="period-pill">📅 Reporting Period: <span id="reportPeriod">— — —</span></div>
+    <button class="gh-badge disconnected" id="ghBadge" title="GitHub connection status — click to open Settings">
+      <span class="gh-dot"></span>
+      <span id="ghBadgeText">Not connected</span>
+      <span class="gh-user" id="ghBadgeUser"></span>
+    </button>
     <div class="actions">
       <button class="btn btn-red"  id="pastBtn">📁 Past Reports</button>
       <button class="btn btn-blue" id="uploadBtn">⬆️ Upload</button>
+      <button class="btn btn-settings" id="settingsBtn" title="Settings">⚙️ Settings</button>
       <input type="file" id="fileInput" accept=".xlsx,.xls,.csv">
     </div>
   </div>
@@ -283,27 +327,46 @@
   Data source: Rocketseed Click Track Export
 </div>
 
-<!-- ===== DRAWER ===== -->
+<!-- ===== DRAWER: PAST REPORTS ===== -->
 <div class="backdrop" id="backdrop"></div>
 <aside class="drawer" id="drawer">
   <header><h3>📁 Past Reports</h3><button class="close" id="closeDrawer">✕</button></header>
   <div class="body">
-    <small>Stored in your private GitHub Gist. Paste a <b>Classic</b> Personal Access Token with the <b>gist</b> scope. The token is saved only in your browser.</small>
-    <div class="help-box">
-      ⚠️ <b>Important:</b> Fine-grained tokens <b>do NOT</b> support the Gists API. You must create a <b>Classic</b> token at
-      https://github.com/settings/tokens → <b>Tokens (classic)</b> → tick the <b>gist</b> scope.
-    </div>
-    <input type="password" id="ghToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxx" style="margin-top:10px;">
+    <small>Reports saved to your private GitHub Gist. Manage your connection in <b>⚙️ Settings</b>.</small>
     <div class="row">
-      <button class="btn btn-blue" id="saveTokenBtn">Save</button>
-      <button class="btn btn-red"  id="clearTokenBtn">Clear</button>
-      <button class="btn btn-ghost" id="refreshBtn">🔄 Refresh</button>
+      <button class="btn btn-ghost" id="refreshBtn">🔄 Refresh list</button>
     </div>
-    <div class="row"><small id="ghStatus">Not connected — paste your GitHub token above.</small></div>
     <hr style="margin:18px 0;border:none;border-top:1px solid var(--border);">
     <button class="btn btn-blue" id="saveReportBtn" style="width:100%;">💾 Save Current Report to Gist</button>
     <div id="pastList" style="margin-top:16px;">
-      <small>🔑 Enter your GitHub token above to load saved reports.</small>
+      <small>🔑 Connect GitHub in <b>⚙️ Settings</b> to load saved reports.</small>
+    </div>
+  </div>
+</aside>
+
+<!-- ===== DRAWER: SETTINGS ===== -->
+<aside class="drawer" id="settingsDrawer">
+  <header><h3>⚙️ Settings</h3><button class="close" id="closeSettings">✕</button></header>
+  <div class="body">
+    <h4 style="margin:0 0 6px;color:var(--navy);font-size:14px;">GitHub Connection</h4>
+    <small>Stored in your private GitHub Gist. Paste a <b>Classic</b> Personal Access Token with the <b>gist</b> scope. The token is saved only in your browser.</small>
+    <div class="help-box">
+      ⚠️ <b>Important:</b> Fine-grained tokens <b>do NOT</b> support the Gists API. You must create a <b>Classic</b> token at
+      <a href="https://github.com/settings/tokens" target="_blank" rel="noopener">github.com/settings/tokens</a> → <b>Tokens (classic)</b> → tick the <b>gist</b> scope.
+    </div>
+    <input type="password" id="ghToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxx" style="margin-top:10px;">
+    <div class="row">
+      <button class="btn btn-blue" id="saveTokenBtn">Save &amp; Connect</button>
+      <button class="btn btn-red"  id="clearTokenBtn">Disconnect</button>
+      <button class="btn btn-ghost" id="testTokenBtn">🔄 Test</button>
+    </div>
+
+    <div class="conn-card disconnected" id="connCard">
+      <span class="dot"></span>
+      <div>
+        <div id="connTitle"><b>Not connected</b></div>
+        <small id="connSub">Paste your GitHub token above and click Save &amp; Connect.</small>
+      </div>
     </div>
   </div>
 </aside>
@@ -327,7 +390,7 @@ function setStatus(msg, isError){
   if(el){ el.textContent=msg; el.classList.toggle('error', !!isError); }
 }
 
-/* ===== Inject brand logo (resilient to copy-paste stripping) ===== */
+/* ===== Inject brand logo ===== */
 (function injectLogo(){
   const slot = $('brandLogo');
   if(!slot) return;
@@ -391,8 +454,8 @@ const CLUSTER_NAMES = {ALL:'All Clusters',BE:'Business Environment',CP:'Channel 
 
 let currentReport = null;
 let activeCluster = 'ALL';
-let filterFrom = null;     // Date object (start of day, inclusive)
-let filterTo   = null;     // Date object (end of day, inclusive)
+let filterFrom = null;
+let filterTo   = null;
 
 /* ===== Upload ===== */
 const fileInput = $('fileInput');
@@ -454,7 +517,6 @@ function formatDate(d){if(!d) return '—';
 function formatTime(d){if(!d) return '—';
   return d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});}
 function isoDay(d){
-  // YYYY-MM-DD in local time
   const y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,'0'), day=String(d.getDate()).padStart(2,'0');
   return `${y}-${m}-${day}`;
 }
@@ -502,7 +564,6 @@ function processRows(rows, filename){
   }
   currentReport = { filename: filename||'Manual entry', clicks, savedAt:new Date().toISOString() };
 
-  // Auto-populate date filter inputs to the full range
   const dates = clicks.map(c => c.clickISO ? new Date(c.clickISO) : (c.sentISO ? new Date(c.sentISO) : null))
                       .filter(Boolean);
   if(dates.length){
@@ -520,7 +581,6 @@ function processRows(rows, filename){
   recompute();
 }
 
-/* ===== Date filter UI ===== */
 function updateFriendlyRangeUI(){
   if(filterFrom && filterTo){
     setText('friendlyRange', friendlyRangeLabel(filterFrom, filterTo));
@@ -538,7 +598,6 @@ $('dateTo').addEventListener('change', () => {
   updateFriendlyRangeUI(); recompute();
 });
 
-/* ===== Quick filter buttons ===== */
 document.querySelectorAll('.date-filter .quick button').forEach(b => {
   b.addEventListener('click', () => {
     const q = b.dataset.q;
@@ -578,15 +637,11 @@ function withinFilter(c){
 function recompute(){
   if(!currentReport) return;
 
-  // 1. Apply date filter FIRST (everything else uses this filtered set)
   const dateScoped = currentReport.clicks.filter(withinFilter);
-
-  // 2. Cluster pill counts (within date range)
   const clusterCounts = {ALL:dateScoped.length,BE:0,CP:0,IT:0,OT:0,SS:0,UN:0};
   dateScoped.forEach(c => clusterCounts[c.cluster] = (clusterCounts[c.cluster]||0)+1);
   ['ALL','BE','CP','IT','OT','SS','UN'].forEach(k => setText('cnt-'+k, clusterCounts[k].toLocaleString()));
 
-  // 3. Apply cluster filter
   const rows = activeCluster==='ALL' ? dateScoped : dateScoped.filter(c => c.cluster===activeCluster);
 
   let internal=0, external=0;
@@ -741,35 +796,124 @@ $('homeBtn').addEventListener('click', () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
-/* ===== Drawer ===== */
-const drawer=$('drawer'), backdrop=$('backdrop');
+/* ===== Drawers ===== */
+const drawer=$('drawer'), backdrop=$('backdrop'), settingsDrawer=$('settingsDrawer');
 function openDrawer(){drawer.classList.add('open');backdrop.classList.add('open');}
 function closeDrawer(){drawer.classList.remove('open');backdrop.classList.remove('open');}
+function openSettings(){settingsDrawer.classList.add('open');backdrop.classList.add('open');}
+function closeSettings(){settingsDrawer.classList.remove('open');backdrop.classList.remove('open');}
+function closeAll(){closeDrawer();closeSettings();}
+
 $('pastBtn').addEventListener('click', openDrawer);
 $('closeDrawer').addEventListener('click', closeDrawer);
-backdrop.addEventListener('click', closeDrawer);
-document.addEventListener('keydown', e => { if(e.key==='Escape') closeDrawer(); });
+$('settingsBtn').addEventListener('click', openSettings);
+$('ghBadge').addEventListener('click', openSettings);
+$('closeSettings').addEventListener('click', closeSettings);
+backdrop.addEventListener('click', closeAll);
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeAll(); });
 
 /* ===== Gist integration ===== */
 const GIST_DESCRIPTION_TAG = 'Rocketseed Report';
 const ghTokenInput = $('ghToken');
 ghTokenInput.value = localStorage.getItem('gh_token') || '';
-updateGhStatus();
 
-$('saveTokenBtn').addEventListener('click', () => {
-  localStorage.setItem('gh_token', ghTokenInput.value.trim());
-  updateGhStatus(); loadPastReports();
+$('saveTokenBtn').addEventListener('click', async () => {
+  const t = ghTokenInput.value.trim();
+  if(!t){ alert('Paste a token first.'); return; }
+  localStorage.setItem('gh_token', t);
+  await verifyConnection(true);
+  if(connectionState.ok) loadPastReports();
 });
 $('clearTokenBtn').addEventListener('click', () => {
-  localStorage.removeItem('gh_token'); ghTokenInput.value=''; updateGhStatus();
-  $('pastList').innerHTML='<small>🔑 Enter your GitHub token above to load saved reports.</small>';
+  localStorage.removeItem('gh_token');
+  ghTokenInput.value='';
+  setConnectionState({ok:false, user:null, reason:'Disconnected.'});
+  $('pastList').innerHTML='<small>🔑 Connect GitHub in <b>⚙️ Settings</b> to load saved reports.</small>';
 });
+$('testTokenBtn').addEventListener('click', () => verifyConnection(true));
 $('refreshBtn').addEventListener('click', loadPastReports);
 $('saveReportBtn').addEventListener('click', saveCurrentReport);
 
 function getToken(){return (ghTokenInput.value||'').trim();}
-function updateGhStatus(){setText('ghStatus', getToken() ? '✅ Token saved in this browser.'
-  : 'Not connected — paste your GitHub token above.');}
+
+/* ----- Connection state + badges ----- */
+const connectionState = { ok:false, user:null, reason:'Not connected' };
+
+function setConnectionState({ok, user, reason, checking, error}){
+  connectionState.ok = !!ok;
+  connectionState.user = user || null;
+
+  const badge = $('ghBadge');
+  const badgeText = $('ghBadgeText');
+  const badgeUser = $('ghBadgeUser');
+  const card = $('connCard');
+  const title = $('connTitle');
+  const sub = $('connSub');
+
+  badge.classList.remove('connected','checking','error','disconnected');
+  card.classList.remove('connected','checking','error','disconnected');
+
+  if(checking){
+    badge.classList.add('checking');
+    card.classList.add('checking');
+    badgeText.textContent = 'Checking…';
+    badgeUser.textContent = '';
+    title.innerHTML = '<b>Verifying token…</b>';
+    sub.textContent = 'Contacting GitHub.';
+    return;
+  }
+  if(error){
+    badge.classList.add('error');
+    card.classList.add('error');
+    badgeText.textContent = 'GitHub error';
+    badgeUser.textContent = '';
+    title.innerHTML = '<b>Connection failed</b>';
+    sub.textContent = reason || 'Token rejected by GitHub.';
+    return;
+  }
+  if(ok){
+    badge.classList.add('connected');
+    card.classList.add('connected');
+    badgeText.textContent = 'Connected to GitHub';
+    badgeUser.textContent = user ? '· @'+user : '';
+    title.innerHTML = '<b>Connected as @'+escapeHtml(user||'')+'</b>';
+    sub.textContent = 'Token has Gist access — reports will sync automatically.';
+    return;
+  }
+  badge.classList.add('disconnected');
+  card.classList.add('disconnected');
+  badgeText.textContent = 'Not connected';
+  badgeUser.textContent = '';
+  title.innerHTML = '<b>Not connected</b>';
+  sub.textContent = reason || 'Paste your GitHub token above and click Save & Connect.';
+}
+
+async function verifyConnection(silent){
+  const token = getToken();
+  if(!token){ setConnectionState({ok:false, reason:'No token saved.'}); return; }
+  setConnectionState({checking:true});
+  try{
+    const res = await fetch('https://api.github.com/user', {
+      headers:{ Authorization:'token '+token, Accept:'application/vnd.github+json' }
+    });
+    if(!res.ok){
+      const msg = res.status===401 ? 'Token is invalid or expired.'
+                : res.status===403 ? 'Token lacks the "gist" scope (must be a Classic token).'
+                : 'GitHub API '+res.status;
+      setConnectionState({error:true, reason:msg});
+      return;
+    }
+    const user = await res.json();
+    const scopes = (res.headers.get('X-OAuth-Scopes')||'').toLowerCase();
+    if(scopes && !scopes.includes('gist')){
+      setConnectionState({error:true, reason:'Token is valid but missing the "gist" scope.'});
+      return;
+    }
+    setConnectionState({ok:true, user:user.login});
+  } catch(err){
+    setConnectionState({error:true, reason:'Network error: '+err.message});
+  }
+}
 
 async function ghFetch(url, options={}){
   const token = getToken();
@@ -780,7 +924,8 @@ async function ghFetch(url, options={}){
   if(!res.ok){
     let detail='';
     try{ detail = (await res.json()).message || ''; } catch(_) {}
-    if(res.status === 403 || res.status === 404){
+    if(res.status === 401 || res.status === 403 || res.status === 404){
+      setConnectionState({error:true, reason:`${res.status} — Token can't access Gists. Use a CLASSIC token with the "gist" scope.`});
       throw new Error(`${res.status} — Your token can't access Gists. Make sure it's a CLASSIC token with the "gist" scope ticked.`);
     }
     throw new Error('GitHub API '+res.status+(detail ? ' — '+detail : ''));
@@ -791,7 +936,7 @@ async function ghFetch(url, options={}){
 
 async function loadPastReports(){
   const list = $('pastList');
-  if(!getToken()){ list.innerHTML='<small>🔑 Enter your GitHub token above.</small>'; return; }
+  if(!getToken()){ list.innerHTML='<small>🔑 Connect GitHub in <b>⚙️ Settings</b> to load saved reports.</small>'; return; }
   list.innerHTML = '<small>⏳ Loading…</small>';
   try{
     const gists = await ghFetch('https://api.github.com/gists?per_page=100');
@@ -799,25 +944,46 @@ async function loadPastReports(){
     if(!reports.length){
       list.innerHTML='<small>No saved reports yet. Upload a file and click <b>Save Current Report</b>.</small>'; return;
     }
-    list.innerHTML = reports.map(g => `
+    list.innerHTML = reports.map(g => {
+      const cleanName = g.description.replace(GIST_DESCRIPTION_TAG,'').replace(/^[—–-]\s*/,'').trim() || 'Untitled';
+      return `
       <div class="item" data-id="${g.id}">
         <div class="info">
-          <b>${escapeHtml(g.description.replace(GIST_DESCRIPTION_TAG,'').replace(/^[—–-]\s*/,'').trim() || 'Untitled')}</b>
+          <b>${escapeHtml(cleanName)}</b>
           <small>${new Date(g.updated_at).toLocaleString()}</small>
         </div>
         <div class="actions" style="display:flex;gap:6px;">
-          <button class="icon-btn primary" data-action="open"   data-id="${g.id}">📂 Open</button>
-          <button class="icon-btn danger"  data-action="delete" data-id="${g.id}">🗑️</button>
+          <button class="icon-btn primary" data-action="open"   data-id="${g.id}" title="Open">📂</button>
+          <button class="icon-btn warn"    data-action="rename" data-id="${g.id}" data-name="${escapeHtml(cleanName)}" title="Rename">✏️</button>
+          <button class="icon-btn danger"  data-action="delete" data-id="${g.id}" title="Delete">🗑️</button>
         </div>
-      </div>`).join('');
+      </div>`;
+    }).join('');
     list.querySelectorAll('button[data-action]').forEach(btn => {
       btn.addEventListener('click', () => {
         if(btn.dataset.action==='open')   openReport(btn.dataset.id);
         if(btn.dataset.action==='delete') deleteReport(btn.dataset.id);
+        if(btn.dataset.action==='rename') renameReport(btn.dataset.id, btn.dataset.name);
       });
     });
   } catch(err){
     list.innerHTML='<small>❌ Could not load gists: '+escapeHtml(err.message)+'</small>';
+  }
+}
+
+async function renameReport(id, currentName){
+  const next = prompt('Rename this report:', currentName || '');
+  if(next===null) return;
+  const clean = next.trim();
+  if(!clean){ alert('Name cannot be empty.'); return; }
+  try{
+    await ghFetch('https://api.github.com/gists/'+id, {
+      method:'PATCH',
+      body: JSON.stringify({ description: GIST_DESCRIPTION_TAG+' — '+clean })
+    });
+    loadPastReports();
+  } catch(err){
+    alert('Could not rename: '+err.message);
   }
 }
 
@@ -834,7 +1000,6 @@ async function openReport(id){
     data.clicks.forEach(c => c.cluster = classifyBanner(c.banner));
     currentReport = data;
     activeCluster='ALL';
-    // restore date filter from saved data
     if(data.filterFromISO){ filterFrom = new Date(data.filterFromISO); $('dateFrom').value = isoDay(filterFrom); }
     else { filterFrom = null; $('dateFrom').value=''; }
     if(data.filterToISO){ filterTo = new Date(data.filterToISO); $('dateTo').value = isoDay(filterTo); }
@@ -855,13 +1020,11 @@ async function deleteReport(id){
 
 async function saveCurrentReport(){
   if(!currentReport){ alert('Upload a report first.'); return; }
-  if(!getToken()){ alert('Save your GitHub token first.'); return; }
+  if(!getToken()){ alert('Connect GitHub in ⚙️ Settings first.'); return; }
 
-  // Only save clicks within the active date range
   const filtered = currentReport.clicks.filter(withinFilter);
   if(!filtered.length){ alert('No clicks within the selected date range — nothing to save.'); return; }
 
-  // Suggest a friendly week-of-month label
   const suggested = (filterFrom && filterTo) ? friendlyRangeLabel(filterFrom, filterTo) : '';
   const fallback = currentReport.filename || ('Rocketseed Report '+new Date().toLocaleDateString());
   const label = prompt('Name this report:', suggested || fallback);
@@ -888,7 +1051,15 @@ async function saveCurrentReport(){
   } catch(err){ setStatus('❌ Could not save: '+err.message, true); }
 }
 
-if(getToken()) loadPastReports();
+/* ===== Auto-connect on load ===== */
+(async function autoConnect(){
+  if(getToken()){
+    await verifyConnection(true);
+    if(connectionState.ok) loadPastReports();
+  } else {
+    setConnectionState({ok:false, reason:'No token saved yet.'});
+  }
+})();
 </script>
 
 </body>
