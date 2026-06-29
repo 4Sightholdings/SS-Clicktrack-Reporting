@@ -36,13 +36,17 @@
 
   /* ===== HOME / LOGO BUTTON ===== */
   .home-btn{
-    background:transparent;border:none;cursor:pointer;padding:4px 6px;border-radius:10px;
-    display:flex;align-items:center;gap:14px;transition:background .15s, transform .15s;
+    background:transparent;border:none;cursor:pointer;
+    padding:6px 10px;border-radius:10px;
+    display:flex;align-items:center;
+    transition:background .15s, transform .15s;
   }
   .home-btn:hover{background:rgba(255,255,255,.08);transform:translateY(-1px);}
   .home-btn:active{transform:translateY(0);}
-  .home-btn svg{height:54px;width:auto;display:block;}
-  .home-btn .divider{width:1px;height:42px;background:rgba(255,255,255,.22);}
+  .home-btn .brand-logo{
+    height:56px;width:auto;display:block;
+    filter:drop-shadow(0 2px 4px rgba(0,0,0,.25));
+  }
 
   /* ===== CLUSTER PILLS ===== */
   .cluster-bar{margin-top:20px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
@@ -161,6 +165,7 @@
   @media (max-width:760px){
     .header{flex-wrap:wrap;}
     .header .meta{margin-left:0;width:100%;justify-content:space-between;}
+    .home-btn .brand-logo{height:44px;}
   }
   @media (max-width:640px){.kpis{grid-template-columns:repeat(2,1fr);}}
 </style>
@@ -169,46 +174,8 @@
 
 <!-- ===== HEADER ===== -->
 <div class="header" id="header">
-  <button class="home-btn" id="homeBtn" title="Home — start a new report" aria-label="Home">
-    <!-- 4Sight Logo (inline SVG) -->
-    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-label="4Sight">
-      <g fill="none" stroke="#ffffff" stroke-width="9" stroke-linecap="round">
-        <!-- crosshair circle (broken into 4 arcs) -->
-        <path d="M 100 12 A 88 88 0 0 1 188 100"/>
-        <path d="M 188 100 A 88 88 0 0 1 100 188"/>
-        <path d="M 100 188 A 88 88 0 0 1 12 100"/>
-        <path d="M 12 100 A 88 88 0 0 1 100 12"/>
-        <!-- crosshair ticks -->
-        <line x1="100" y1="2"  x2="100" y2="22"/>
-        <line x1="100" y1="178" x2="100" y2="198"/>
-        <line x1="2"   y1="100" x2="22"  y2="100"/>
-        <line x1="178" y1="100" x2="198" y2="100"/>
-      </g>
-      <!-- 4sight wordmark -->
-      <text x="100" y="118" text-anchor="middle"
-            font-family="Segoe UI, Arial, sans-serif" font-weight="700"
-            font-size="48" fill="#ffffff" letter-spacing="-1">4sight</text>
-      <text x="158" y="80" font-family="Segoe UI, Arial, sans-serif"
-            font-size="14" fill="#ffffff">TM</text>
-    </svg>
-    <span class="divider"></span>
-    <!-- 4AI Logo (inline SVG) -->
-    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-label="4AI">
-      <g fill="none" stroke="#ffffff" stroke-width="9" stroke-linecap="round">
-        <path d="M 100 12 A 88 88 0 0 1 188 100"/>
-        <path d="M 188 100 A 88 88 0 0 1 100 188"/>
-        <path d="M 100 188 A 88 88 0 0 1 12 100"/>
-        <path d="M 12 100 A 88 88 0 0 1 100 12"/>
-        <line x1="100" y1="2"   x2="100" y2="22"/>
-        <line x1="100" y1="178" x2="100" y2="198"/>
-        <line x1="2"   y1="100" x2="22"  y2="100"/>
-        <line x1="178" y1="100" x2="198" y2="100"/>
-      </g>
-      <text x="60"  y="125" font-family="Segoe UI, Arial, sans-serif"
-            font-weight="700" font-size="60" fill="#ffffff">4</text>
-      <text x="100" y="125" font-family="Segoe UI, Arial, sans-serif"
-            font-weight="700" font-size="48" fill="#c8102e">AI</text>
-    </svg>
+  <button class="home-btn" id="homeBtn" title="Home — reset dashboard" aria-label="Home">
+    4Sight-4AI-White.pngt="4Sight | 4AI" class="brand-logo">
   </button>
 
   <div>
@@ -588,7 +555,7 @@ document.querySelectorAll('#clusterBar .pill').forEach(p => {
   });
 });
 
-/* ===== Home button — full reset, ready for new upload ===== */
+/* ===== Home button — full reset only (no auto-upload) ===== */
 $('homeBtn').addEventListener('click', () => {
   currentReport = null;
   activeCluster = 'ALL';
@@ -596,7 +563,8 @@ $('homeBtn').addEventListener('click', () => {
     x.classList.toggle('active', x.dataset.cluster === 'ALL'));
   ['ALL','BE','CP','IT','OT','SS','UN'].forEach(k => setText('cnt-'+k, '0'));
 
-  ['totalClicks','externalClicks','internalClicks','uniqueRecipients','senders'].forEach(id => setText(id, 'XXX'));
+  ['totalClicks','externalClicks','internalClicks','uniqueRecipients','senders']
+    .forEach(id => setText(id, 'XXX'));
   setText('externalPct', 'XX%');
   setText('internalPct', 'XX%');
   setText('medianResponse', 'XX min');
@@ -611,10 +579,9 @@ $('homeBtn').addEventListener('click', () => {
   $('bannerList').innerHTML =
     '<div class="empty">Upload a Rocketseed export to see the banner breakdown.</div>';
 
-  setStatus('Ready — upload a new Rocketseed click report to begin.');
+  setStatus('Ready — click ⬆️ Upload to load a new Rocketseed click report.');
   fileInput.value = '';
   window.scrollTo({ top: 0, behavior: 'smooth' });
-  setTimeout(() => fileInput.click(), 350);
 });
 
 /* ===== Drawer ===== */
