@@ -1,69 +1,41 @@
 {
   "folders": [
     {
-      "id": "mtfyhb2aq1eim",
+      "id": "mtfzdl3yv9odo",
       "name": "4Sight Africa (Pty) Ltd",
       "parentId": null
     },
     {
-      "id": "mtfyhb2ac6pzn",
+      "id": "mtfzdl3ywcs36",
       "name": "4Sight OT Automation (Pty) Ltd",
       "parentId": null
     },
     {
-      "id": "mtfyhb2al41d3",
+      "id": "mtfzdl3ysrw56",
       "name": "4Sight OT Optimisation (Pty) Ltd",
       "parentId": null
     },
     {
-      "id": "mtfyhb2a6owrd",
+      "id": "mtfzdl3yht1f8",
       "name": "4Sight OT Simulation (Pty) Ltd",
       "parentId": null
     },
     {
-      "id": "mtfyhb2a9mb1o",
+      "id": "mtfzdl3yukqdr",
       "name": "4Sight Systems (Pty) Ltd",
       "parentId": null
     },
     {
-      "id": "mtfyhb2ay2fg0",
+      "id": "mtfzdl3ybzy7b",
       "name": "Dynamics Africa Services (Pty) Ltd",
       "parentId": null
     },
     {
-      "id": "mtfyhb2acxctf",
+      "id": "mtfzdl3ygiunu",
       "name": "Namibia",
       "parentId": null
-    },
-    {
-      "id": "mtfyi8zbgoxfg",
-      "name": "test",
-      "parentId": "mtfyhb2aq1eim"
     }
   ],
-  "docs": [
-    {
-      "id": "mtfyiofqzvgiw",
-      "folderId": "mtfyhb2aq1eim",
-      "name": "Testing If This Works",
-      "type": "Agreement",
-      "ownerId": "mtfyhpbov191u",
-      "review": "2026-08-22",
-      "expiry": "2026-08-22",
-      "url": "",
-      "notes": "",
-      "fileName": "EmployeeEvalSummaryDetailed (1).pdf",
-      "filePath": "files/mtfyiofqzvgiw-EmployeeEvalSummaryDetailed__1_.pdf",
-      "fileUrl": "https://raw.githubusercontent.com/4Sightholdings/SS-Clicktrack-Reporting/main/files/mtfyiofqzvgiw-EmployeeEvalSummaryDetailed__1_.pdf"
-    }
-  ],
-  "contacts": [
-    {
-      "id": "mtfyhpbov191u",
-      "name": "Christo Jvv",
-      "email": "zena.morgan@4sight.cloud",
-      "title": "Marketing Co - Ordinator",
-      "entityId": "mtfyhb2aq1eim"
-    }
-  ]
+  "contacts": [],
+  "docs": []
 }
