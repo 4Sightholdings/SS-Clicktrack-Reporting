@@ -1,41 +1,49 @@
 {
   "folders": [
     {
-      "id": "mtfzdl3yv9odo",
+      "id": "mtfzeswk0f10n",
       "name": "4Sight Africa (Pty) Ltd",
       "parentId": null
     },
     {
-      "id": "mtfzdl3ywcs36",
+      "id": "mtfzeswkhjdqg",
       "name": "4Sight OT Automation (Pty) Ltd",
       "parentId": null
     },
     {
-      "id": "mtfzdl3ysrw56",
+      "id": "mtfzeswk31afr",
       "name": "4Sight OT Optimisation (Pty) Ltd",
       "parentId": null
     },
     {
-      "id": "mtfzdl3yht1f8",
+      "id": "mtfzeswksw235",
       "name": "4Sight OT Simulation (Pty) Ltd",
       "parentId": null
     },
     {
-      "id": "mtfzdl3yukqdr",
+      "id": "mtfzeswklng5g",
       "name": "4Sight Systems (Pty) Ltd",
       "parentId": null
     },
     {
-      "id": "mtfzdl3ybzy7b",
+      "id": "mtfzeswk5qybr",
       "name": "Dynamics Africa Services (Pty) Ltd",
       "parentId": null
     },
     {
-      "id": "mtfzdl3ygiunu",
+      "id": "mtfzeswkwqg8l",
       "name": "Namibia",
       "parentId": null
     }
   ],
-  "contacts": [],
+  "contacts": [
+    {
+      "id": "mtfzezkfc9iya",
+      "name": "Christo Jvv",
+      "email": "zena.morgan@4sight.cloud",
+      "title": "Marketing Co - Ordinator",
+      "entityId": "mtfzeswk0f10n"
+    }
+  ],
   "docs": []
 }
